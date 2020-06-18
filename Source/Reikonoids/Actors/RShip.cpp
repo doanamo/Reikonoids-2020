@@ -25,6 +25,7 @@ void ARShip::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
     Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+    // Setup player bindings.
     PlayerInputComponent->BindAction("Fire", EInputEvent::IE_Pressed, this, &ARShip::Fire);
     PlayerInputComponent->BindAxis("MoveForward", this, &ARShip::MoveForward);
     PlayerInputComponent->BindAxis("RotateRight", this, &ARShip::RotateRight);
@@ -59,7 +60,11 @@ void ARShip::Fire()
 
 void ARShip::MoveForward(float AxisScale)
 {
-    GetCharacterMovement()->AddInputVector(GetActorForwardVector() * AxisScale);
+    // Allow only forward movement.
+    if(AxisScale > 0.0f)
+    {
+        GetCharacterMovement()->AddInputVector(GetActorForwardVector() * AxisScale);
+    }
 }
 
 void ARShip::RotateRight(float AxisScale)

@@ -6,14 +6,14 @@
 UCLASS()
 class REIKONOIDS_API ARPlayerController : public APlayerController
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     TSubclassOf<AActor> CameraAttachmentClass;
 
 protected:
-	ARPlayerController();
+    ARPlayerController();
 
     virtual void OnPossess(APawn* PossesedPawn) override;
     virtual void OnUnPossess() override;

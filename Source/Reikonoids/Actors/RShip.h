@@ -3,22 +3,25 @@
 #include <GameFramework/Character.h>
 #include "RShip.generated.h"
 
+class ARProjectile;
+
 UCLASS()
 class REIKONOIDS_API ARShip : public ACharacter
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
-	void Fire();
-	void MoveForward(float AxisScale);
-	void RotateRight(float AxisScale);
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+        TSubclassOf<ARProjectile> ProjectileClass;
+
+    void Fire();
+    void MoveForward(float AxisScale);
+    void RotateRight(float AxisScale);
 
 protected:
-	ARShip();
+    ARShip();
 
-	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
-	virtual void BeginPlay() override;
-	virtual void Tick(float DeltaTime) override;
-
-
+    virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
+    virtual void BeginPlay() override;
+    virtual void Tick(float DeltaTime) override;
 };

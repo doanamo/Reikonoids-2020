@@ -6,9 +6,8 @@
 UCLASS()
 class REIKONOIDS_API ARGameMode : public AGameMode
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 protected:
-	ARGameMode();
-	
+    ARGameMode();
 };

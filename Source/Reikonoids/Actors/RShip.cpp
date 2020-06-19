@@ -1,5 +1,6 @@
 #include "RShip.h"
 #include "RProjectile.h"
+#include "../Components/RHealthComponent.h"
 #include <Components/CapsuleComponent.h>
 #include <GameFramework/CharacterMovementComponent.h>
 
@@ -19,6 +20,10 @@ ARShip::ARShip()
     Movement->DefaultLandMovementMode = EMovementMode::MOVE_Flying;
     Movement->SetPlaneConstraintNormal(FVector::UpVector);
     Movement->bConstrainToPlane = true;
+
+    // Setup health component.
+    HealthComponent = CreateDefaultSubobject<URHealthComponent>(TEXT("HealthComponent"));
+    HealthComponent->OnDeath.AddDynamic(this, &ARShip::OnDeath);
 }
 
 void ARShip::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -39,6 +44,12 @@ void ARShip::BeginPlay()
 void ARShip::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
+}
+
+void ARShip::OnDeath()
+{
+    // Destroy on death.
+    Destroy();
 }
 
 void ARShip::Fire()

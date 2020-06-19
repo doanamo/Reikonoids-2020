@@ -4,6 +4,7 @@
 #include "RShip.generated.h"
 
 class ARProjectile;
+class URHealthComponent;
 
 UCLASS()
 class REIKONOIDS_API ARShip : public ACharacter
@@ -12,7 +13,7 @@ class REIKONOIDS_API ARShip : public ACharacter
 
 public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
-        TSubclassOf<ARProjectile> ProjectileClass;
+    TSubclassOf<ARProjectile> ProjectileClass;
 
     void Fire();
     void MoveForward(float AxisScale);
@@ -24,4 +25,11 @@ protected:
     virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
     virtual void BeginPlay() override;
     virtual void Tick(float DeltaTime) override;
+
+    UFUNCTION()
+    void OnDeath();
+
+protected:
+    UPROPERTY(VisibleAnywhere)
+    URHealthComponent* HealthComponent = nullptr;
 };

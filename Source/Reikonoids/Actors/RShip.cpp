@@ -1,6 +1,6 @@
 #include "RShip.h"
-#include "RProjectile.h"
 #include "../Components/RHealthComponent.h"
+#include "../Components/RWeaponComponent.h"
 #include <Components/CapsuleComponent.h>
 #include <GameFramework/CharacterMovementComponent.h>
 
@@ -24,6 +24,11 @@ ARShip::ARShip()
     // Setup health component.
     HealthComponent = CreateDefaultSubobject<URHealthComponent>(TEXT("HealthComponent"));
     HealthComponent->OnDeath.AddDynamic(this, &ARShip::OnDeath);
+
+    // Setup weapon component.
+    WeaponComponent = CreateDefaultSubobject<URWeaponComponent>(TEXT("WeaponComponent"));
+    WeaponComponent->SetupAttachment(RootComponent);
+    WeaponComponent->SetRelativeLocation(FVector(100.0f, 0.0f, 0.0f));
 }
 
 void ARShip::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -31,7 +36,8 @@ void ARShip::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
     Super::SetupPlayerInputComponent(PlayerInputComponent);
 
     // Setup player bindings.
-    PlayerInputComponent->BindAction("Fire", EInputEvent::IE_Pressed, this, &ARShip::Fire);
+    PlayerInputComponent->BindAction("Fire", EInputEvent::IE_Pressed, this, &ARShip::StartFiring);
+    PlayerInputComponent->BindAction("Fire", EInputEvent::IE_Released, this, &ARShip::StopFiring);
     PlayerInputComponent->BindAxis("MoveForward", this, &ARShip::MoveForward);
     PlayerInputComponent->BindAxis("RotateRight", this, &ARShip::RotateRight);
 }
@@ -48,25 +54,17 @@ void ARShip::Tick(float DeltaTime)
 
 void ARShip::OnDeath()
 {
-    // Destroy on death.
     Destroy();
 }
 
-void ARShip::Fire()
+void ARShip::StartFiring()
 {
-    check(ProjectileClass != nullptr);
+    WeaponComponent->StartFiring();
+}
 
-    // Spawn projectile.
-    FActorSpawnParameters SpawnParams;
-    SpawnParams.Instigator = this;
-
-    FVector ProjectileLocation = GetActorLocation() + GetActorForwardVector() * 100.0f;
-    FRotator ProjectileRotation = GetActorRotation();
-
-    ARProjectile* Projectile = GetWorld()->SpawnActor<ARProjectile>(
-        ProjectileClass, ProjectileLocation, ProjectileRotation, SpawnParams);
-
-    Projectile->Direction = GetActorForwardVector();
+void ARShip::StopFiring()
+{
+    WeaponComponent->StopFiring();
 }
 
 void ARShip::MoveForward(float AxisScale)

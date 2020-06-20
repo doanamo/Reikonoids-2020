@@ -3,8 +3,8 @@
 #include <GameFramework/Character.h>
 #include "RShip.generated.h"
 
-class ARProjectile;
 class URHealthComponent;
+class URWeaponComponent;
 
 UCLASS()
 class REIKONOIDS_API ARShip : public ACharacter
@@ -12,10 +12,8 @@ class REIKONOIDS_API ARShip : public ACharacter
     GENERATED_BODY()
 
 public:
-    UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    TSubclassOf<ARProjectile> ProjectileClass;
-
-    void Fire();
+    void StartFiring();
+    void StopFiring();
     void MoveForward(float AxisScale);
     void RotateRight(float AxisScale);
 
@@ -32,4 +30,7 @@ protected:
 protected:
     UPROPERTY(VisibleAnywhere)
     URHealthComponent* HealthComponent = nullptr;
+
+    UPROPERTY(VisibleAnywhere)
+    URWeaponComponent* WeaponComponent = nullptr;
 };

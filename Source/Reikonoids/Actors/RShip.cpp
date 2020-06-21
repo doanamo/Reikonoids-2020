@@ -2,24 +2,22 @@
 #include "../Components/RHealthComponent.h"
 #include "../Components/RWeaponComponent.h"
 #include <Components/CapsuleComponent.h>
-#include <GameFramework/CharacterMovementComponent.h>
 
 ARShip::ARShip()
 {
+    // Use controller rotation.
+    bUseControllerRotationPitch = true;
+    bUseControllerRotationYaw = true;
+
     // Setup capsule component.
-    UCapsuleComponent* Capsule = GetCapsuleComponent();
-    check(Capsule != nullptr);
-
-    Capsule->SetCapsuleRadius(50.0f);
-    Capsule->SetCapsuleHalfHeight(50.0f);
-
-    // Setup movement component.
-    UCharacterMovementComponent* Movement = GetCharacterMovement();
-    check(Movement != nullptr);
-
-    Movement->DefaultLandMovementMode = EMovementMode::MOVE_Flying;
-    Movement->SetPlaneConstraintNormal(FVector::UpVector);
-    Movement->bConstrainToPlane = true;
+    CapsuleComponent = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CapsuleComponent"));
+    CapsuleComponent->SetupAttachment(RootComponent);
+    CapsuleComponent->SetSimulatePhysics(true);
+    CapsuleComponent->SetCapsuleRadius(50.0f);
+    CapsuleComponent->SetCapsuleHalfHeight(50.0f);
+    CapsuleComponent->SetCollisionProfileName(FName("Pawn"));
+    CapsuleComponent->SetConstraintMode(EDOFMode::XYPlane);
+    CapsuleComponent->SetLinearDamping(LinearDampingForce);
 
     // Setup health component.
     HealthComponent = CreateDefaultSubobject<URHealthComponent>(TEXT("HealthComponent"));
@@ -27,7 +25,7 @@ ARShip::ARShip()
 
     // Setup weapon component.
     WeaponComponent = CreateDefaultSubobject<URWeaponComponent>(TEXT("WeaponComponent"));
-    WeaponComponent->SetupAttachment(RootComponent);
+    WeaponComponent->SetupAttachment(CapsuleComponent);
     WeaponComponent->SetRelativeLocation(FVector(100.0f, 0.0f, 0.0f));
 }
 
@@ -50,6 +48,10 @@ void ARShip::BeginPlay()
 void ARShip::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
+
+    // Apply physical movement.
+    FVector MovementInput = ConsumeMovementInputVector();
+    CapsuleComponent->AddImpulse(MovementInput * MovementImpulseSize);
 }
 
 void ARShip::OnDeath()
@@ -72,7 +74,7 @@ void ARShip::MoveForward(float AxisScale)
     // Allow only forward movement.
     if(AxisScale > 0.0f)
     {
-        GetCharacterMovement()->AddInputVector(GetActorForwardVector() * AxisScale);
+        AddMovementInput(GetActorForwardVector() * AxisScale);
     }
 }
 

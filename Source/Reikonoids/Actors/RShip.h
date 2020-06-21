@@ -1,17 +1,24 @@
 #pragma once
 
-#include <GameFramework/Character.h>
+#include <GameFramework/Pawn.h>
 #include "RShip.generated.h"
 
+class UCapsuleComponent;
 class URHealthComponent;
 class URWeaponComponent;
 
 UCLASS()
-class REIKONOIDS_API ARShip : public ACharacter
+class REIKONOIDS_API ARShip : public APawn
 {
     GENERATED_BODY()
 
 public:
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    float MovementImpulseSize = 800.0f;
+
+    UPROPERTY(EditDefaultsOnly)
+    float LinearDampingForce = 1.0f;
+
     void StartFiring();
     void StopFiring();
     void MoveForward(float AxisScale);
@@ -28,6 +35,9 @@ protected:
     void OnDeath();
 
 protected:
+    UPROPERTY(VisibleAnywhere)
+    UCapsuleComponent* CapsuleComponent = nullptr;
+
     UPROPERTY(VisibleAnywhere)
     URHealthComponent* HealthComponent = nullptr;
 

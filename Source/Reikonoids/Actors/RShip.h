@@ -3,7 +3,7 @@
 #include <GameFramework/Pawn.h>
 #include "RShip.generated.h"
 
-class UCapsuleComponent;
+class USphereComponent;
 class URHealthComponent;
 class URWeaponComponent;
 
@@ -36,7 +36,7 @@ protected:
 
 protected:
     UPROPERTY(VisibleAnywhere)
-    UCapsuleComponent* CapsuleComponent = nullptr;
+    USphereComponent* SphereCollision = nullptr;
 
     UPROPERTY(VisibleAnywhere)
     URHealthComponent* HealthComponent = nullptr;

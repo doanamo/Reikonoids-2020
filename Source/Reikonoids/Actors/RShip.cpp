@@ -1,7 +1,7 @@
 #include "RShip.h"
 #include "../Components/RHealthComponent.h"
 #include "../Components/RWeaponComponent.h"
-#include <Components/CapsuleComponent.h>
+#include <Components/SphereComponent.h>
 
 ARShip::ARShip()
 {
@@ -9,15 +9,14 @@ ARShip::ARShip()
     bUseControllerRotationPitch = true;
     bUseControllerRotationYaw = true;
 
-    // Setup capsule component.
-    CapsuleComponent = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CapsuleComponent"));
-    CapsuleComponent->SetSimulatePhysics(true);
-    CapsuleComponent->SetCapsuleRadius(50.0f);
-    CapsuleComponent->SetCapsuleHalfHeight(50.0f);
-    CapsuleComponent->SetCollisionProfileName(FName("Pawn"));
-    CapsuleComponent->SetConstraintMode(EDOFMode::XYPlane);
-    CapsuleComponent->SetLinearDamping(LinearDampingForce);
-    RootComponent = CapsuleComponent;
+    // Setup sphere collision component.
+    SphereCollision = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
+    SphereCollision->SetSimulatePhysics(true);
+    SphereCollision->SetSphereRadius(50.0f);
+    SphereCollision->SetConstraintMode(EDOFMode::XYPlane);
+    SphereCollision->SetCollisionProfileName(FName("Pawn"));
+    SphereCollision->SetLinearDamping(LinearDampingForce);
+    RootComponent = SphereCollision;
 
     // Setup health component.
     HealthComponent = CreateDefaultSubobject<URHealthComponent>(TEXT("HealthComponent"));
@@ -25,7 +24,7 @@ ARShip::ARShip()
 
     // Setup weapon component.
     WeaponComponent = CreateDefaultSubobject<URWeaponComponent>(TEXT("WeaponComponent"));
-    WeaponComponent->SetupAttachment(CapsuleComponent);
+    WeaponComponent->SetupAttachment(SphereCollision);
     WeaponComponent->SetRelativeLocation(FVector(100.0f, 0.0f, 0.0f));
 }
 
@@ -51,7 +50,7 @@ void ARShip::Tick(float DeltaTime)
 
     // Apply physical movement.
     FVector MovementInput = ConsumeMovementInputVector();
-    CapsuleComponent->AddImpulse(MovementInput * MovementImpulseSize);
+    SphereCollision->AddImpulse(MovementInput * MovementImpulseSize);
 }
 
 void ARShip::OnDeath()

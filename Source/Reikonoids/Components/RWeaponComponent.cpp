@@ -27,20 +27,13 @@ void URWeaponComponent::FireProjectile()
 {
     check(ProjectileClass != nullptr);
 
-    // Spawn and setup projectile.
+    // Spawn projectile.
     FActorSpawnParameters SpawnParams;
     SpawnParams.Instigator = Cast<APawn>(GetOwner());
     SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
     ARProjectile* Projectile = GetWorld()->SpawnActor<ARProjectile>(
         ProjectileClass, GetComponentLocation(), GetComponentRotation(), SpawnParams);
-
-    if(Projectile)
-    {
-        // SpawnActor() may return nullpr if projectile overlaps and deals damage on spawn,
-        // leading to actor's instant destruction and nullptr in result. Unreal is weird.
-        Projectile->Direction = GetForwardVector();
-    }
 
     // Broadcast weapon fired event.
     OnWeaponFired.Broadcast();

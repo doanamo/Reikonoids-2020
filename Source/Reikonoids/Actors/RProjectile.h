@@ -20,9 +20,6 @@ public:
     UPROPERTY(EditDefaultsOnly)
     float Speed = 1000.0f;
 
-    UPROPERTY(BlueprintReadOnly)
-    FVector Direction = FVector::ForwardVector;
-
 protected:
     ARProjectile();
 

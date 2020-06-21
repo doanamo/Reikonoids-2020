@@ -25,9 +25,6 @@ void ARProjectile::BeginPlay()
 
     // Expire projectile when life time ends.
     GetWorld()->GetTimerManager().SetTimer(LifetimeTimer, this, &ARProjectile::OnExpire, LifeTime, false);
-
-    // Orientate projectile towards direction.
-    SetActorRotation(Direction.ToOrientationRotator());
 }
 
 void ARProjectile::Tick(float DeltaTime)
@@ -35,7 +32,7 @@ void ARProjectile::Tick(float DeltaTime)
     Super::Tick(DeltaTime);
 
     // Move projectile forward at constant speed with sweep enabled.
-    SetActorLocation(GetActorLocation() + Direction * Speed * DeltaTime, true);
+    SetActorLocation(GetActorLocation() + GetActorForwardVector() * Speed * DeltaTime, true);
 }
 
 void ARProjectile::OnActorBeginOverlap(AActor* OverlappedActor, AActor* OtherActor)

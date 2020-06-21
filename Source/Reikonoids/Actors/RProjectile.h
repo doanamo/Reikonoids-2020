@@ -31,7 +31,7 @@ protected:
     virtual void Tick(float DeltaTime) override;
 
     UFUNCTION()
-    void OnActorHit(AActor* Self, AActor* Other, FVector NormalImpulse, const FHitResult& Hit);
+    void OnActorBeginOverlap(AActor* OverlappedActor, AActor* OtherActor);
 
     UFUNCTION()
     void OnExpire();

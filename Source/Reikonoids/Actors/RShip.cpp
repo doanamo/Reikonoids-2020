@@ -11,13 +11,13 @@ ARShip::ARShip()
 
     // Setup capsule component.
     CapsuleComponent = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CapsuleComponent"));
-    CapsuleComponent->SetupAttachment(RootComponent);
     CapsuleComponent->SetSimulatePhysics(true);
     CapsuleComponent->SetCapsuleRadius(50.0f);
     CapsuleComponent->SetCapsuleHalfHeight(50.0f);
     CapsuleComponent->SetCollisionProfileName(FName("Pawn"));
     CapsuleComponent->SetConstraintMode(EDOFMode::XYPlane);
     CapsuleComponent->SetLinearDamping(LinearDampingForce);
+    RootComponent = CapsuleComponent;
 
     // Setup health component.
     HealthComponent = CreateDefaultSubobject<URHealthComponent>(TEXT("HealthComponent"));

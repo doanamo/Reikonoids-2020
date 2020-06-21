@@ -8,6 +8,7 @@ ARProjectile::ARProjectile()
     // Setup sphere collision component.
     SphereCollision = CreateDefaultSubobject<USphereComponent>(TEXT("SphereCollision"));
     SphereCollision->SetSphereRadius(16.0f);
+    RootComponent = SphereCollision;
 }
 
 void ARProjectile::PostInitializeComponents()
@@ -15,7 +16,7 @@ void ARProjectile::PostInitializeComponents()
     Super::PostInitializeComponents();
 
     // React when projectile hits another actor.
-    AActor::OnActorHit.AddDynamic(this, &ARProjectile::OnActorHit);
+    AActor::OnActorBeginOverlap.AddDynamic(this, &ARProjectile::OnActorBeginOverlap);
 }
 
 void ARProjectile::BeginPlay()
@@ -37,13 +38,13 @@ void ARProjectile::Tick(float DeltaTime)
     SetActorLocation(GetActorLocation() + Direction * Speed * DeltaTime, true);
 }
 
-void ARProjectile::OnActorHit(AActor* Self, AActor* Other, FVector NormalImpulse, const FHitResult& Hit)
+void ARProjectile::OnActorBeginOverlap(AActor* OverlappedActor, AActor* OtherActor)
 {
     // Make hit actor receive damage.
-    if(Other != nullptr)
+    if(OtherActor != nullptr)
     {
         FDamageEvent DamageEvent;
-        Other->TakeDamage(Damage, DamageEvent, nullptr, this);
+        OtherActor->TakeDamage(Damage, DamageEvent, nullptr, this);
     }
 
     // Destroy projectile.

@@ -37,20 +37,22 @@ void ARProjectile::Tick(float DeltaTime)
 
 void ARProjectile::OnActorBeginOverlap(AActor* OverlappedActor, AActor* OtherActor)
 {
+    check(OverlappedActor == this);
+
     // Check if projectile is already marked for destruction
     // to prevent dealing damage to multiple actors at same time.
     if(IsActorBeingDestroyed())
         return;
 
-    // Make hit actor receive damage.
+    // Destroy projectile.
+    ensure(Destroy());
+
+    // Make overlapped actor receive damage.
     if(OtherActor != nullptr)
     {
         FDamageEvent DamageEvent;
         OtherActor->TakeDamage(Damage, DamageEvent, nullptr, this);
     }
-
-    // Destroy projectile.
-    Destroy();
 }
 
 void ARProjectile::OnExpire()

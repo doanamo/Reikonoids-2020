@@ -39,6 +39,13 @@ void URHealthComponent::OnTakeAnyDamage(AActor* DamagedActor, float Damage, cons
     if(IsDead())
         return;
 
+    // Print debug damage info.
+    if(GEngine)
+    {
+        GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Yellow, FString::Printf(TEXT("%s received %f damage from %s"),
+            *GetOwner()->GetHumanReadableName(), Damage, *DamageCauser->GetHumanReadableName()));
+    }
+
     // Update current health value.
     CurrentHealth = FMath::Clamp(CurrentHealth - Damage, 0.0f, MaximumHealth);
 

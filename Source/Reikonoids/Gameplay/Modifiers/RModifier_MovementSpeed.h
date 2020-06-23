@@ -1,26 +1,26 @@
 #pragma once
 
 #include "RModifier_Base.h"
-#include "RModifier_FireRate.generated.h"
+#include "RModifier_MovementSpeed.generated.h"
 
 class ARShip;
 
 UCLASS()
-class REIKONOIDS_API URModifier_FireRate : public URModifier_Base
+class REIKONOIDS_API URModifier_MovementSpeed : public URModifier_Base
 {
     GENERATED_BODY()
 
 public:
-    URModifier_FireRate();
-    ~URModifier_FireRate();
+    URModifier_MovementSpeed();
+    ~URModifier_MovementSpeed();
 
     UPROPERTY(EditDefaultsOnly)
-    float FireRateScale = 4.0f;
+    float MovementImpulseSizeScale = 2.0f;
 
 private:
     virtual bool Apply(AActor* ModifiedActor) override;
     virtual void Revert() override;
 
     ARShip* ModifiedShip = nullptr;
-    float PreviousFireRate = 0.0f;
+    float PreviousMovementImpulseSize = 0.0f;
 };

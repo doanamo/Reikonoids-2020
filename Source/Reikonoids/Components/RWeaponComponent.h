@@ -16,6 +16,9 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     TSubclassOf<ARProjectile> ProjectileClass;
 
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+    float ProjectileDamageScale = 1.0f;
+
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     float FireRatePerSecond = 1.0f;
 

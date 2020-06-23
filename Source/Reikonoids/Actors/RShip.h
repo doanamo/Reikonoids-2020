@@ -21,10 +21,10 @@ public:
     void MoveForward(float AxisScale);
     void RotateRight(float AxisScale);
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
     float MovementImpulseSize = 500.0f;
 
-    UPROPERTY(EditDefaultsOnly)
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
     float LinearDampingForce = 1.0f;
 
     UPROPERTY(VisibleAnywhere)

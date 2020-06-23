@@ -1,5 +1,6 @@
 #include "RWeaponComponent.h"
 #include "../Actors/RProjectile.h"
+#include <Kismet/GameplayStatics.h>
 
 URWeaponComponent::URWeaponComponent() = default;
 
@@ -31,9 +32,18 @@ void URWeaponComponent::FireProjectile()
     FActorSpawnParameters SpawnParams;
     SpawnParams.Instigator = Cast<APawn>(GetOwner());
     SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+    SpawnParams.bDeferConstruction = true;
 
-    ARProjectile* Projectile = GetWorld()->SpawnActor<ARProjectile>(
-        ProjectileClass, GetComponentLocation(), GetComponentRotation(), SpawnParams);
+    ARProjectile* Projectile = GetWorld()->SpawnActor<ARProjectile>(ProjectileClass, SpawnParams);
+
+    // Setup projectile.
+    Projectile->Damage *= ProjectileDamageScale;
+
+    FTransform SpawnTransform;
+    SpawnTransform.SetLocation(GetComponentLocation());
+    SpawnTransform.SetRotation(GetComponentQuat());
+
+    UGameplayStatics::FinishSpawningActor(Projectile, SpawnTransform);
 
     // Broadcast weapon fired event.
     OnWeaponFired.Broadcast();

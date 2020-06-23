@@ -1,14 +1,14 @@
-#include "RModifier_Speed.h"
+#include "RModifier_MovementSpeed.h"
 #include "../../Actors/RShip.h"
 
-URModifier_Speed::URModifier_Speed()
+URModifier_MovementSpeed::URModifier_MovementSpeed()
 {
     URModifier_Base::InitialDuration = 10.0f;
 }
 
-URModifier_Speed::~URModifier_Speed() = default;
+URModifier_MovementSpeed::~URModifier_MovementSpeed() = default;
 
-bool URModifier_Speed::Apply(AActor* ModifiedActor)
+bool URModifier_MovementSpeed::Apply(AActor* ModifiedActor)
 {
     if(!Super::Apply(ModifiedActor))
         return false;
@@ -18,16 +18,14 @@ bool URModifier_Speed::Apply(AActor* ModifiedActor)
     if(ModifiedShip == nullptr)
         return false;
 
-    // Save previous movement impulse size.
-    PreviousMovementImpulseSize = ModifiedShip->MovementImpulseSize;
-
     // Modify movement impulse size.
+    PreviousMovementImpulseSize = ModifiedShip->MovementImpulseSize;
     ModifiedShip->MovementImpulseSize *= MovementImpulseSizeScale;
 
     return true;
 }
 
-void URModifier_Speed::Revert()
+void URModifier_MovementSpeed::Revert()
 {
     Super::Revert();
 

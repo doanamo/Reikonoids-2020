@@ -1,5 +1,6 @@
 #include "RShip.h"
 #include "../Components/RHealthComponent.h"
+#include "../Components/RModifierStackComponent.h"
 #include "../Components/RWeaponComponent.h"
 #include <Components/SphereComponent.h>
 
@@ -22,11 +23,16 @@ ARShip::ARShip()
     HealthComponent = CreateDefaultSubobject<URHealthComponent>(TEXT("HealthComponent"));
     HealthComponent->OnDeath.AddDynamic(this, &ARShip::OnDeath);
 
+    // Create modifier stack component.
+    ModifierStack = CreateDefaultSubobject<URModifierStackComponent>(TEXT("ModifierStack"));
+
     // Setup weapon component.
     WeaponComponent = CreateDefaultSubobject<URWeaponComponent>(TEXT("WeaponComponent"));
     WeaponComponent->SetupAttachment(SphereCollision);
     WeaponComponent->SetRelativeLocation(FVector(100.0f, 0.0f, 0.0f));
 }
+
+ARShip::~ARShip() = default;
 
 void ARShip::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {

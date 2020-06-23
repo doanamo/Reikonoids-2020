@@ -11,6 +11,8 @@ class REIKONOIDS_API ARProjectile : public AActor
     GENERATED_BODY()
 
 public:
+    virtual ~ARProjectile();
+
     UPROPERTY(EditDefaultsOnly)
     float Damage = 10.0f;
 
@@ -19,6 +21,9 @@ public:
 
     UPROPERTY(EditDefaultsOnly)
     float Speed = 1000.0f;
+
+    UPROPERTY(VisibleAnywhere)
+    USphereComponent* SphereCollision = nullptr;
 
 protected:
     ARProjectile();
@@ -35,7 +40,4 @@ protected:
 
 private:
     FTimerHandle LifetimeTimer;
-
-    UPROPERTY(VisibleAnywhere)
-    USphereComponent* SphereCollision = nullptr;
 };

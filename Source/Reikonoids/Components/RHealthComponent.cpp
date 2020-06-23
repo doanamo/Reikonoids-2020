@@ -43,7 +43,7 @@ void URHealthComponent::OnTakeAnyDamage(AActor* DamagedActor, float Damage, cons
     if(GEngine)
     {
         GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Yellow, FString::Printf(TEXT("%s received %f damage from %s"),
-            *GetOwner()->GetHumanReadableName(), Damage, *DamageCauser->GetHumanReadableName()));
+            *GetOwner()->GetName(), Damage, *DamageCauser->GetName()));
     }
 
     // Update current health value.

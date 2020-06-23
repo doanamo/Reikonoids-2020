@@ -13,6 +13,11 @@ class REIKONOIDS_API ARAsteroid : public AActor
     GENERATED_BODY()
 
 public:
+    virtual ~ARAsteroid();
+
+    void ApplyRandomTorque();
+    void ApplyRandomVelocity();
+
     UPROPERTY(EditDefaultsOnly)
     int FractureIndex = 3;
 
@@ -28,18 +33,6 @@ public:
     UPROPERTY(EditDefaultsOnly)
     FVector MaxRandomVelocity = FVector(100.0f, 100.0f, 100.0f);
 
-    void ApplyRandomTorque();
-    void ApplyRandomVelocity();
-
-protected:
-    ARAsteroid();
-
-    virtual void BeginPlay() override;
-
-    UFUNCTION()
-    void OnDeath();
-
-private:
     UPROPERTY(VisibleAnywhere)
     USphereComponent* SphereCollision = nullptr;
 
@@ -48,4 +41,12 @@ private:
 
     UPROPERTY(VisibleAnywhere)
     URHealthComponent* HealthComponent = nullptr;
+
+protected:
+    ARAsteroid();
+
+    virtual void BeginPlay() override;
+
+    UFUNCTION()
+    void OnDeath();
 };

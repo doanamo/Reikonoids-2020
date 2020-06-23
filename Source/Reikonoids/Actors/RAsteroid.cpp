@@ -24,6 +24,8 @@ ARAsteroid::ARAsteroid()
     HealthComponent->OnDeath.AddDynamic(this, &ARAsteroid::OnDeath);
 }
 
+ARAsteroid::~ARAsteroid() = default;
+
 void ARAsteroid::BeginPlay()
 {
     Super::BeginPlay();

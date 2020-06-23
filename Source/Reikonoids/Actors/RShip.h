@@ -5,6 +5,7 @@
 
 class USphereComponent;
 class URHealthComponent;
+class URModifierStackComponent;
 class URWeaponComponent;
 
 UCLASS()
@@ -13,16 +14,30 @@ class REIKONOIDS_API ARShip : public APawn
     GENERATED_BODY()
 
 public:
+    virtual ~ARShip();
+
+    void StartFiring();
+    void StopFiring();
+    void MoveForward(float AxisScale);
+    void RotateRight(float AxisScale);
+
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     float MovementImpulseSize = 800.0f;
 
     UPROPERTY(EditDefaultsOnly)
     float LinearDampingForce = 1.0f;
 
-    void StartFiring();
-    void StopFiring();
-    void MoveForward(float AxisScale);
-    void RotateRight(float AxisScale);
+    UPROPERTY(VisibleAnywhere)
+    USphereComponent* SphereCollision = nullptr;
+
+    UPROPERTY(VisibleAnywhere)
+    URHealthComponent* HealthComponent = nullptr;
+
+    UPROPERTY(VisibleAnywhere)
+    URModifierStackComponent* ModifierStack = nullptr;
+
+    UPROPERTY(VisibleAnywhere)
+    URWeaponComponent* WeaponComponent = nullptr;
 
 protected:
     ARShip();
@@ -33,14 +48,4 @@ protected:
 
     UFUNCTION()
     void OnDeath();
-
-protected:
-    UPROPERTY(VisibleAnywhere)
-    USphereComponent* SphereCollision = nullptr;
-
-    UPROPERTY(VisibleAnywhere)
-    URHealthComponent* HealthComponent = nullptr;
-
-    UPROPERTY(VisibleAnywhere)
-    URWeaponComponent* WeaponComponent = nullptr;
 };

@@ -11,6 +11,8 @@ ARProjectile::ARProjectile()
     RootComponent = SphereCollision;
 }
 
+ARProjectile::~ARProjectile() = default;
+
 void ARProjectile::PostInitializeComponents()
 {
     Super::PostInitializeComponents();
@@ -38,6 +40,7 @@ void ARProjectile::Tick(float DeltaTime)
 void ARProjectile::OnActorBeginOverlap(AActor* OverlappedActor, AActor* OtherActor)
 {
     check(OverlappedActor == this);
+    check(OtherActor != nullptr);
 
     // Check if projectile is already marked for destruction
     // to prevent dealing damage to multiple actors at same time.
@@ -48,11 +51,8 @@ void ARProjectile::OnActorBeginOverlap(AActor* OverlappedActor, AActor* OtherAct
     ensure(Destroy());
 
     // Make overlapped actor receive damage.
-    if(OtherActor != nullptr)
-    {
-        FDamageEvent DamageEvent;
-        OtherActor->TakeDamage(Damage, DamageEvent, nullptr, this);
-    }
+    FDamageEvent DamageEvent;
+    OtherActor->TakeDamage(Damage, DamageEvent, nullptr, this);
 }
 
 void ARProjectile::OnExpire()

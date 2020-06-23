@@ -3,7 +3,7 @@
 
 URModifier_HealthRegeneration::URModifier_HealthRegeneration()
 {
-    URModifier_Base::RemainingDuration = 10.0f;
+    URModifier_Base::InitialDuration = 10.0f;
 }
 
 URModifier_HealthRegeneration::~URModifier_HealthRegeneration() = default;

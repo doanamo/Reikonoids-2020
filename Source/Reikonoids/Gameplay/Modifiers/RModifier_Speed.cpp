@@ -3,7 +3,7 @@
 
 URModifier_Speed::URModifier_Speed()
 {
-    URModifier_Base::RemainingDuration = 10.0f;
+    URModifier_Base::InitialDuration = 10.0f;
 }
 
 URModifier_Speed::~URModifier_Speed() = default;

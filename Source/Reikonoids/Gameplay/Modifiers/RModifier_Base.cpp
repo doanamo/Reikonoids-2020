@@ -5,6 +5,7 @@ URModifier_Base::~URModifier_Base() = default;
 
 bool URModifier_Base::Apply(AActor* ModifiedActor)
 {
+    RemainingDuration = InitialDuration;
     return !IsExpired();
 }
 

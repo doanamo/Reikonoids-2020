@@ -14,7 +14,7 @@ public:
     virtual ~URModifier_Base();
 
     UPROPERTY(EditAnywhere)
-    float RemainingDuration = 0.0f;
+    float InitialDuration = 0.0f;
 
 protected:
     friend class URModifierStackComponent;
@@ -26,4 +26,6 @@ protected:
     virtual void Revert();
 
     bool IsExpired() const;
+
+    float RemainingDuration = 0.0f;
 };

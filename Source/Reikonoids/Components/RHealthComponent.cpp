@@ -51,7 +51,7 @@ void URHealthComponent::OnTakeAnyDamage(AActor* DamagedActor, float Damage, cons
         {
             GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Yellow,
                 FString::Printf(TEXT("%s received %f healing from %s"),
-                *GetOwner()->GetName(), Damage, *DamageCauser->GetName()));
+                *GetOwner()->GetName(), -Damage, *DamageCauser->GetName()));
         }
     }
 

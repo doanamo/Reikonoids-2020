@@ -3,7 +3,7 @@
 #include <Components/ActorComponent.h>
 #include "RModifierStackComponent.generated.h"
 
-class URModifier;
+class URModifier_Base;
 
 UCLASS()
 class REIKONOIDS_API URModifierStackComponent : public UActorComponent
@@ -13,10 +13,10 @@ class REIKONOIDS_API URModifierStackComponent : public UActorComponent
 public:
     URModifierStackComponent();
 
-    bool ApplyModifier(URModifier* Modifier);
+    bool ApplyModifier(URModifier_Base* Modifier);
 
 private:
     virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-    TArray<URModifier*> ModifierStack;
+    TArray<URModifier_Base*> ModifierStack;
 };

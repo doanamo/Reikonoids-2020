@@ -1,6 +1,6 @@
 #include "RDrop.h"
 #include "RShip.h"
-#include "../Gameplay/RModifier.h"
+#include "../Gameplay/Modifiers/RModifier_Base.h"
 #include "../Components/RModifierStackComponent.h"
 #include <Components/SphereComponent.h>
 #include <Components/StaticMeshComponent.h>
@@ -54,7 +54,7 @@ void ARDrop::OnActorBeginOverlap(AActor* OverlappedActor, AActor* OtherActor)
         // Create and apply modifier.
         if(ModifierClass)
         {
-            URModifier* Modifier = NewObject<URModifier>(this, ModifierClass);
+            URModifier_Base* Modifier = NewObject<URModifier_Base>(this, ModifierClass);
             if(!ModifierStack->ApplyModifier(Modifier))
                 return;
         }

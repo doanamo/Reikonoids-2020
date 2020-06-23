@@ -22,7 +22,7 @@ public:
     void RotateRight(float AxisScale);
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    float MovementImpulseSize = 800.0f;
+    float MovementImpulseSize = 500.0f;
 
     UPROPERTY(EditDefaultsOnly)
     float LinearDampingForce = 1.0f;

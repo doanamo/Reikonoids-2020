@@ -4,7 +4,7 @@
 
 URModifier_FireRate::URModifier_FireRate()
 {
-    URModifier::RemainingDuration = 10.0f;
+    URModifier_Base::RemainingDuration = 10.0f;
 }
 
 URModifier_FireRate::~URModifier_FireRate() = default;

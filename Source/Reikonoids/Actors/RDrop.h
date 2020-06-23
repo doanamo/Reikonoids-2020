@@ -3,7 +3,7 @@
 #include <GameFramework/Actor.h>
 #include "RDrop.generated.h"
 
-class URModifier;
+class URModifier_Base;
 class USphereComponent;
 class UStaticMeshComponent;
 
@@ -16,7 +16,7 @@ public:
     virtual ~ARDrop();
 
     UPROPERTY(EditDefaultsOnly)
-    TSubclassOf<URModifier> ModifierClass;
+    TSubclassOf<URModifier_Base> ModifierClass;
 
     UPROPERTY(VisibleAnywhere)
     USphereComponent* SphereCollision = nullptr;

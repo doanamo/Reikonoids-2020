@@ -1,17 +1,17 @@
 #pragma once
 
 #include <UObject/Object.h>
-#include "RModifier.generated.h"
+#include "RModifier_Base.generated.h"
 
 class AActor;
 
 UCLASS()
-class REIKONOIDS_API URModifier : public UObject
+class REIKONOIDS_API URModifier_Base : public UObject
 {
     GENERATED_BODY()
 
 public:
-    virtual ~URModifier();
+    virtual ~URModifier_Base();
 
     UPROPERTY(EditAnywhere)
     float RemainingDuration = 0.0f;
@@ -19,7 +19,7 @@ public:
 protected:
     friend class URModifierStackComponent;
 
-    URModifier();
+    URModifier_Base();
 
     virtual bool Apply(AActor* ModifiedActor);
     virtual void Tick(float DeltaTime);

@@ -35,15 +35,24 @@ void URHealthComponent::BeginPlay()
 
 void URHealthComponent::OnTakeAnyDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser)
 {
-    // Check if already dead.
-    if(IsDead())
+    if(IsDead() || Damage == 0.0f)
         return;
 
     // Print debug damage info.
     if(GEngine)
     {
-        GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Yellow, FString::Printf(TEXT("%s received %f damage from %s"),
-            *GetOwner()->GetName(), Damage, *DamageCauser->GetName()));
+        if(Damage > 0.0f)
+        {
+            GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Yellow,
+                FString::Printf(TEXT("%s received %f damage from %s"),
+                *GetOwner()->GetName(), Damage, *DamageCauser->GetName()));
+        }
+        else
+        {
+            GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Yellow,
+                FString::Printf(TEXT("%s received %f healing from %s"),
+                *GetOwner()->GetName(), Damage, *DamageCauser->GetName()));
+        }
     }
 
     // Update current health value.

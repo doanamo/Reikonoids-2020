@@ -13,8 +13,11 @@ class REIKONOIDS_API URModifier_Base : public UObject
 public:
     virtual ~URModifier_Base();
 
-    UPROPERTY(EditAnywhere)
+    UPROPERTY(EditDefaultsOnly)
     float InitialDuration = 0.0f;
+
+    UPROPERTY(EditDefaultsOnly)
+    bool ReplaceExisting = true;
 
 protected:
     friend class URModifierStackComponent;

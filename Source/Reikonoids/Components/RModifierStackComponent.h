@@ -18,5 +18,6 @@ public:
 private:
     virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+    UPROPERTY()
     TArray<URModifier_Base*> ModifierStack;
 };

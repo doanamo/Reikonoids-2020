@@ -43,6 +43,9 @@ class REIKONOIDS_API URSpawnDirector : public UObject
     GENERATED_BODY()
 
 public:
+    UFUNCTION(BlueprintCallable)
+    void ToggleSpawning(bool Enabled);
+
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
     TArray<FRSpawnDefinition> SpawnDefinitions;
 
@@ -51,13 +54,15 @@ public:
 
     URSpawnDirector();
 
-    void SetSpawnOrigin(const FVector& NewSpawnOrigin);
-    void SetupPopulationUpdate(UWorld* DirectedWorld);
+
     void OverrideMinSpawnRadiusOnNextUpdate(float Radius);
+    void SetupPopulationUpdate(UWorld* DirectedWorld);
+    void SetSpawnOrigin(const FVector& NewSpawnOrigin);
 
 private:
     void UpdatePopulation();
 
+    bool SpawnEnabled = true;
     UWorld* World = nullptr;
     FTimerHandle UpdateTimer;
     FVector SpawnOrigin = FVector::ZeroVector;

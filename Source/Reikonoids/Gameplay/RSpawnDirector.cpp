@@ -5,9 +5,14 @@ URSpawnDirector::URSpawnDirector()
 {
 }
 
-void URSpawnDirector::SetSpawnOrigin(const FVector& NewSpawnOrigin)
+void URSpawnDirector::ToggleSpawning(bool Enabled)
 {
-    SpawnOrigin = NewSpawnOrigin;
+    SpawnEnabled = Enabled;
+}
+
+void URSpawnDirector::OverrideMinSpawnRadiusOnNextUpdate(float Radius)
+{
+    OverrideIgnoreMinSpawnRadius = Radius;
 }
 
 void URSpawnDirector::SetupPopulationUpdate(UWorld* DirectedWorld)
@@ -26,9 +31,9 @@ void URSpawnDirector::SetupPopulationUpdate(UWorld* DirectedWorld)
     TimerManager.SetTimer(UpdateTimer, this, &URSpawnDirector::UpdatePopulation, PopulationUpdateDelay, true, 0.0f);
 }
 
-void URSpawnDirector::OverrideMinSpawnRadiusOnNextUpdate(float Radius)
+void URSpawnDirector::SetSpawnOrigin(const FVector& NewSpawnOrigin)
 {
-    OverrideIgnoreMinSpawnRadius = Radius;
+    SpawnOrigin = NewSpawnOrigin;
 }
 
 void URSpawnDirector::UpdatePopulation()
@@ -64,44 +69,47 @@ void URSpawnDirector::UpdatePopulation()
         }
 
         // Spawn actors within spawn radius.
-        int SpawnsNeeded = Definition.SpawnCount - Population.Actors.Num();
-        for(int SpawnIndex = 0; SpawnIndex < SpawnsNeeded; ++SpawnIndex)
+        if(SpawnEnabled)
         {
-            // Calculate random position using uniformly randomized point on annulus.
-            float SpawnRadiusMin = OverrideIgnoreMinSpawnRadius >= 0.0f ? OverrideIgnoreMinSpawnRadius : Definition.SpawnRadiusMin;
-            float SpawnRadiusMax = FMath::Max(SpawnRadiusMin, Definition.SpawnRadiusMax);
-
-            float Theta = FMath::RandRange(0.0f, 360.0f);
-            float Distance = FMath::Sqrt(FMath::RandRange(0.0f, 1.0f) * (FMath::Square(SpawnRadiusMin) - FMath::Square(SpawnRadiusMax)) + FMath::Square(SpawnRadiusMax));
-
-            FVector RandomPosition;
-            RandomPosition.X = Distance * FMath::Cos(Theta);
-            RandomPosition.Y = Distance * FMath::Sin(Theta);
-            RandomPosition += SpawnOrigin;
-
-            // Use random rotation if requested.
-            FRotator RandomRotation;
-            if(Definition.RandomizeRotation)
+            int SpawnsNeeded = Definition.SpawnCount - Population.Actors.Num();
+            for(int SpawnIndex = 0; SpawnIndex < SpawnsNeeded; ++SpawnIndex)
             {
-                RandomRotation.Yaw = FMath::RandRange(0.0f, 360.0f);
-            }
+                // Calculate random position using uniformly randomized point on annulus.
+                float SpawnRadiusMin = OverrideIgnoreMinSpawnRadius >= 0.0f ? OverrideIgnoreMinSpawnRadius : Definition.SpawnRadiusMin;
+                float SpawnRadiusMax = FMath::Max(SpawnRadiusMin, Definition.SpawnRadiusMax);
 
-            // Spawn actor.
-            FActorSpawnParameters SpawnParams;
-            SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::DontSpawnIfColliding;
+                float Theta = FMath::RandRange(0.0f, 360.0f);
+                float Distance = FMath::Sqrt(FMath::RandRange(0.0f, 1.0f) * (FMath::Square(SpawnRadiusMin) - FMath::Square(SpawnRadiusMax)) + FMath::Square(SpawnRadiusMax));
 
-            if(AActor* Actor = World->SpawnActor<AActor>(Definition.ActorClass, RandomPosition, RandomRotation, SpawnParams))
-            {
-                if(GEngine)
+                FVector RandomPosition;
+                RandomPosition.X = Distance * FMath::Cos(Theta);
+                RandomPosition.Y = Distance * FMath::Sin(Theta);
+                RandomPosition += SpawnOrigin;
+
+                // Use random rotation if requested.
+                FRotator RandomRotation;
+                if(Definition.RandomizeRotation)
                 {
-                    GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Yellow,
-                        FString::Printf(TEXT("Spawn director spawned %s at distance of %f units"),
-                            *Actor->GetName(), FVector::Dist(SpawnOrigin, RandomPosition)));
+                    RandomRotation.Yaw = FMath::RandRange(0.0f, 360.0f);
                 }
 
-                Population.Actors.Push(Actor);
+                // Spawn actor.
+                FActorSpawnParameters SpawnParams;
+                SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::DontSpawnIfColliding;
 
-                check(FVector::Dist(SpawnOrigin, Actor->GetActorLocation()) > SpawnRadiusMin);
+                if(AActor* Actor = World->SpawnActor<AActor>(Definition.ActorClass, RandomPosition, RandomRotation, SpawnParams))
+                {
+                    if(GEngine)
+                    {
+                        GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Yellow,
+                            FString::Printf(TEXT("Spawn director spawned %s at distance of %f units"),
+                                *Actor->GetName(), FVector::Dist(SpawnOrigin, RandomPosition)));
+                    }
+
+                    Population.Actors.Push(Actor);
+
+                    check(FVector::Dist(SpawnOrigin, Actor->GetActorLocation()) > SpawnRadiusMin);
+                }
             }
         }
     }

@@ -15,8 +15,8 @@ class REIKONOIDS_API ARDrop : public AActor
 public:
     virtual ~ARDrop();
 
-    UPROPERTY(EditDefaultsOnly)
-    TSubclassOf<URModifier_Base> ModifierClass;
+    UPROPERTY(Instanced, EditDefaultsOnly)
+    URModifier_Base* Modifier = nullptr;
 
     UPROPERTY(VisibleAnywhere)
     USphereComponent* SphereCollision = nullptr;

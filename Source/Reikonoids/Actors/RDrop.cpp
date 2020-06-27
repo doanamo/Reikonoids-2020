@@ -51,12 +51,13 @@ void ARDrop::OnActorBeginOverlap(AActor* OverlappedActor, AActor* OtherActor)
         URModifierStackComponent* ModifierStack = Ship->ModifierStack;
         check(ModifierStack != nullptr);
 
-        // Create and apply modifier.
-        if(ModifierClass)
+        // Apply modifier.
+        if(Modifier)
         {
-            URModifier_Base* Modifier = NewObject<URModifier_Base>(this, ModifierClass);
             if(!ModifierStack->ApplyModifier(Modifier))
                 return;
+
+            Modifier = nullptr;
         }
 
         // Destroy drop.

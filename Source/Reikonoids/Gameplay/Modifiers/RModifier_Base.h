@@ -5,7 +5,7 @@
 
 class AActor;
 
-UCLASS()
+UCLASS(EditInlineNew)
 class REIKONOIDS_API URModifier_Base : public UObject
 {
     GENERATED_BODY()

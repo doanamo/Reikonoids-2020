@@ -9,7 +9,7 @@ class UWorld;
 class AActor;
 
 USTRUCT(BlueprintType)
-struct FRSpawnDefinition
+struct REIKONOIDS_API FRSpawnDefinition
 {
     GENERATED_BODY()
 

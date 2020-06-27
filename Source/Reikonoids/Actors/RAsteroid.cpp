@@ -31,6 +31,7 @@ void ARAsteroid::BeginPlay()
     Super::BeginPlay();
 
     ApplyRandomTorque();
+    ApplyRandomVelocity();
 }
 
 void ARAsteroid::ApplyRandomTorque()

@@ -85,6 +85,7 @@ void URSpawnDirector::UpdatePopulation()
                 FVector RandomLocation;
                 RandomLocation.X = Distance * FMath::Cos(Theta);
                 RandomLocation.Y = Distance * FMath::Sin(Theta);
+                RandomLocation.Z = 0.0f;
                 RandomLocation += SpawnOrigin;
 
                 // Use random rotation if requested.

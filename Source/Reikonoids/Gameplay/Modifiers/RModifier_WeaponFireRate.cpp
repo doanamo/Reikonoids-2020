@@ -4,6 +4,7 @@
 
 URModifier_WeaponFireRate::URModifier_WeaponFireRate()
 {
+    URModifier_Base::Name = NSLOCTEXT("Modifier", "WeaponFireRate", "Weapon Fire Rate");
     URModifier_Base::InitialDuration = 10.0f;
 }
 

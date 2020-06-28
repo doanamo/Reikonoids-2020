@@ -3,6 +3,7 @@
 
 URModifier_HealthRegeneration::URModifier_HealthRegeneration()
 {
+    URModifier_Base::Name = NSLOCTEXT("Modifier", "HealthRegeneration", "Health Regeneration");
     URModifier_Base::InitialDuration = 10.0f;
 }
 

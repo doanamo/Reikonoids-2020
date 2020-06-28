@@ -4,6 +4,7 @@
 
 URModifier_ProjectileDamage::URModifier_ProjectileDamage()
 {
+    URModifier_Base::Name = NSLOCTEXT("Modifier", "ProjectileDamage", "Projectile Damage");
     URModifier_Base::InitialDuration = 10.0f;
 }
 

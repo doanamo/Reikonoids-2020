@@ -15,7 +15,7 @@ class REIKONOIDS_API ARDrop : public AActor
 public:
     virtual ~ARDrop();
 
-    UPROPERTY(Instanced, EditDefaultsOnly)
+    UPROPERTY(Instanced, EditDefaultsOnly, BlueprintReadOnly)
     URModifier_Base* Modifier = nullptr;
 
     UPROPERTY(VisibleAnywhere)

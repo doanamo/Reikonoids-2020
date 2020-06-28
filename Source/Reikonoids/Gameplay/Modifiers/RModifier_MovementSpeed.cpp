@@ -3,6 +3,7 @@
 
 URModifier_MovementSpeed::URModifier_MovementSpeed()
 {
+    URModifier_Base::Name = NSLOCTEXT("Modifier", "MovementSpeed", "Movement Speed");
     URModifier_Base::InitialDuration = 10.0f;
 }
 

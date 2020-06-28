@@ -17,6 +17,7 @@ protected:
 
     virtual void OnPossess(APawn* PossesedPawn) override;
     virtual void OnUnPossess() override;
+    virtual void BeginDestroy() override;
 
 private:
     AActor* CameraAttachment = nullptr;

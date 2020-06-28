@@ -3,6 +3,7 @@
 #include <Components/ActorComponent.h>
 #include "RHealthComponent.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnHealthChangeSignature, float, CurrentHealth, float, MaximumHealth);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDeathSignature);
 
 UCLASS()
@@ -21,6 +22,9 @@ public:
 
     UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
     float CurrentHealth = FullHealth;
+
+    UPROPERTY(BlueprintAssignable)
+    FOnHealthChangeSignature OnHealthChange;
 
     UPROPERTY(BlueprintAssignable)
     FOnDeathSignature OnDeath;

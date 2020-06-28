@@ -16,9 +16,16 @@ class REIKONOIDS_API ARShip : public APawn
 public:
     virtual ~ARShip();
 
+    UFUNCTION(BlueprintCallable)
     void StartFiring();
+
+    UFUNCTION(BlueprintCallable)
     void StopFiring();
+
+    UFUNCTION(BlueprintCallable)
     void MoveForward(float AxisScale);
+
+    UFUNCTION(BlueprintCallable)
     void RotateRight(float AxisScale);
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
@@ -27,16 +34,16 @@ public:
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
     float LinearDampingForce = 1.0f;
 
-    UPROPERTY(VisibleAnywhere)
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
     USphereComponent* SphereCollision = nullptr;
 
-    UPROPERTY(VisibleAnywhere)
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
     URHealthComponent* HealthComponent = nullptr;
 
-    UPROPERTY(VisibleAnywhere)
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
     URModifierStackComponent* ModifierStack = nullptr;
 
-    UPROPERTY(VisibleAnywhere)
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
     URWeaponComponent* WeaponComponent = nullptr;
 
 protected:

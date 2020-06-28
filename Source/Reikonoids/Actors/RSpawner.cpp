@@ -5,6 +5,8 @@ ARSpawner::~ARSpawner() = default;
 
 void ARSpawner::BeginPlay()
 {
+    Super::BeginPlay();
+
     // Calculate total weight for list of entries.
     float WeightSum = 0.0f;
 

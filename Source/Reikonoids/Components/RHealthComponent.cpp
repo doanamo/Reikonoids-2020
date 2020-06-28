@@ -56,7 +56,14 @@ void URHealthComponent::OnTakeAnyDamage(AActor* DamagedActor, float Damage, cons
     }
 
     // Update current health value.
-    CurrentHealth = FMath::Clamp(CurrentHealth - Damage, 0.0f, MaximumHealth);
+    float UpdatedHealth = FMath::Clamp(CurrentHealth - Damage, 0.0f, MaximumHealth);
+
+    if(UpdatedHealth != CurrentHealth)
+    {
+        OnHealthChange.Broadcast(UpdatedHealth, MaximumHealth);
+    }
+
+    CurrentHealth = UpdatedHealth;
 
     // Broadcast actor's death event on fatal damage.
     if(CurrentHealth <= 0.0f)

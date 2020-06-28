@@ -1,7 +1,17 @@
 #include "RSpawner.h"
+#include "../Gameplay/RSpawnDirector.h"
 
 ARSpawner::ARSpawner() = default;
 ARSpawner::~ARSpawner() = default;
+
+void ARSpawner::SetupDeferredSpawnRegistration(URSpawnDirector* InSpawnDirector, TArray<AActor*>* InPopulation)
+{
+    check(InSpawnDirector);
+    check(InPopulation);
+
+    SpawnDirector = InSpawnDirector;
+    Population = InPopulation;
+}
 
 void ARSpawner::BeginPlay()
 {
@@ -23,8 +33,16 @@ void ARSpawner::BeginPlay()
     {
         if(WeightRandom <= WeightProbe + Entry.Weight)
         {
+            // Spawn actor definition.
             FActorSpawnParameters SpawnParams;
-            GetWorld()->SpawnActor<AActor>(Entry.Class, GetActorTransform(), SpawnParams);
+            AActor* SpawnedActor = GetWorld()->SpawnActor<AActor>(Entry.Class, GetActorTransform(), SpawnParams);
+
+            // Register spawned actor if needed.
+            if(SpawnedActor && SpawnDirector)
+            {
+                Population->Add(SpawnedActor);
+            }
+
             break;
         }
 

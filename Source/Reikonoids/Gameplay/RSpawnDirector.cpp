@@ -1,9 +1,10 @@
 #include "RSpawnDirector.h"
+#include "../Actors/RSpawner.h"
 #include <GameFramework/Actor.h>
+#include <Kismet/GameplayStatics.h>
 
-URSpawnDirector::URSpawnDirector()
-{
-}
+URSpawnDirector::URSpawnDirector() = default;
+URSpawnDirector::~URSpawnDirector() = default;
 
 void URSpawnDirector::ToggleSpawning(bool Enabled)
 {
@@ -74,17 +75,17 @@ void URSpawnDirector::UpdatePopulation()
             int SpawnsNeeded = Definition.SpawnCount - Population.Actors.Num();
             for(int SpawnIndex = 0; SpawnIndex < SpawnsNeeded; ++SpawnIndex)
             {
-                // Calculate random position using uniformly randomized point on annulus.
+                // Calculate random spawn location using uniformly randomized point on annulus.
                 float SpawnRadiusMin = OverrideIgnoreMinSpawnRadius >= 0.0f ? OverrideIgnoreMinSpawnRadius : Definition.SpawnRadiusMin;
                 float SpawnRadiusMax = FMath::Max(SpawnRadiusMin, Definition.SpawnRadiusMax);
 
                 float Theta = FMath::RandRange(0.0f, 360.0f);
                 float Distance = FMath::Sqrt(FMath::RandRange(0.0f, 1.0f) * (FMath::Square(SpawnRadiusMin) - FMath::Square(SpawnRadiusMax)) + FMath::Square(SpawnRadiusMax));
 
-                FVector RandomPosition;
-                RandomPosition.X = Distance * FMath::Cos(Theta);
-                RandomPosition.Y = Distance * FMath::Sin(Theta);
-                RandomPosition += SpawnOrigin;
+                FVector RandomLocation;
+                RandomLocation.X = Distance * FMath::Cos(Theta);
+                RandomLocation.Y = Distance * FMath::Sin(Theta);
+                RandomLocation += SpawnOrigin;
 
                 // Use random rotation if requested.
                 FRotator RandomRotation;
@@ -94,21 +95,39 @@ void URSpawnDirector::UpdatePopulation()
                 }
 
                 // Spawn actor.
+                // Deferred construction is needed otherwise actors such as spawners that
+                // destroy themselves immediatelly will result in SpawnActor() returning nullptr.
+                FTransform SpawnTransform;
+                SpawnTransform.SetLocation(RandomLocation);
+                SpawnTransform.SetRotation(RandomRotation.Quaternion());
+
                 FActorSpawnParameters SpawnParams;
                 SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::DontSpawnIfColliding;
+                SpawnParams.bDeferConstruction = true;
 
-                if(AActor* Actor = World->SpawnActor<AActor>(Definition.ActorClass, RandomPosition, RandomRotation, SpawnParams))
+                if(AActor* SpawnedActor = World->SpawnActor<AActor>(Definition.ActorClass, SpawnTransform, SpawnParams))
                 {
                     if(GEngine)
                     {
                         GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Yellow,
                             FString::Printf(TEXT("Spawn director spawned %s at distance of %f units"),
-                                *Actor->GetName(), FVector::Dist(SpawnOrigin, RandomPosition)));
+                            *SpawnedActor->GetName(), FVector::Dist(SpawnOrigin, RandomLocation)));
                     }
 
-                    Population.Actors.Push(Actor);
+                    if(ARSpawner* SpawnerActor = Cast<ARSpawner>(SpawnedActor))
+                    {
+                        // Defer actor registration to spawner as it will immediately destroy
+                        // itself after spawning an actor which would otherwise not be registered.
+                        // Passing population array is fine as long as we do not allow removal of populations.
+                        SpawnerActor->SetupDeferredSpawnRegistration(this, &Population.Actors);
+                    }
+                    else
+                    {
+                        // Register actor in population list.
+                        Population.Actors.Push(SpawnedActor);
+                    }
 
-                    check(FVector::Dist(SpawnOrigin, Actor->GetActorLocation()) > SpawnRadiusMin);
+                    UGameplayStatics::FinishSpawningActor(SpawnedActor, SpawnTransform);
                 }
             }
         }

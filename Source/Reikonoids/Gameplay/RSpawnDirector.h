@@ -53,7 +53,7 @@ public:
     float PopulationUpdateDelay = 1.0f;
 
     URSpawnDirector();
-
+    ~URSpawnDirector();
 
     void OverrideMinSpawnRadiusOnNextUpdate(float Radius);
     void SetupPopulationUpdate(UWorld* DirectedWorld);

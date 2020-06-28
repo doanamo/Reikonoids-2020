@@ -3,6 +3,8 @@
 #include <GameFramework/Actor.h>
 #include "RSpawner.generated.h"
 
+class URSpawnDirector;
+
 USTRUCT(BlueprintType)
 struct REIKONOIDS_API FRSpawnerEntry
 {
@@ -26,8 +28,14 @@ public:
 
     virtual ~ARSpawner();
 
+    void SetupDeferredSpawnRegistration(URSpawnDirector* InSpawnDirector, TArray<AActor*>* InPopulation);
+
 protected:
     ARSpawner();
 
     virtual void BeginPlay() override;
+
+private:
+    URSpawnDirector* SpawnDirector = nullptr;
+    TArray<AActor*>* Population = nullptr;
 };

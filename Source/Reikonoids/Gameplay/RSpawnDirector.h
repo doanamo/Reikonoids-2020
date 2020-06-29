@@ -9,12 +9,9 @@ class UWorld;
 class AActor;
 
 USTRUCT(BlueprintType)
-struct REIKONOIDS_API FRSpawnDefinition
+struct REIKONOIDS_API FRSpawnPopulation
 {
     GENERATED_BODY()
-
-    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-    TSubclassOf<AActor> ActorClass;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
     float SpawnRadiusMin = 4000.0f;
@@ -30,12 +27,6 @@ struct REIKONOIDS_API FRSpawnDefinition
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
     bool RandomizeRotation = false;
-};
-
-USTRUCT()
-struct REIKONOIDS_API FRSpawnPopulation
-{
-    GENERATED_BODY()
 
     UPROPERTY()
     TArray<AActor*> Actors;
@@ -51,7 +42,7 @@ public:
     void ToggleSpawning(bool Enabled);
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-    TArray<FRSpawnDefinition> SpawnDefinitions;
+    TMap<TSubclassOf<AActor>, FRSpawnPopulation> PopulationMap;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
     float PopulationUpdateDelay = 1.0f;
@@ -59,9 +50,10 @@ public:
     URSpawnDirector();
     ~URSpawnDirector();
 
+    void SetSpawnOrigin(const FVector& InSpawnOrigin);
     void OverrideMinSpawnRadiusOnNextUpdate(float Radius);
-    void SetupPopulationUpdate(UWorld* DirectedWorld);
-    void SetSpawnOrigin(const FVector& NewSpawnOrigin);
+    void SetupPopulationUpdate(UWorld* InWorld);
+    void RegisterGenericActor(AActor* Actor);
 
 private:
     void UpdatePopulation();
@@ -71,7 +63,4 @@ private:
     FTimerHandle UpdateTimer;
     FVector SpawnOrigin = FVector::ZeroVector;
     float OverrideIgnoreMinSpawnRadius = -1.0f;
-
-    UPROPERTY()
-    TArray<FRSpawnPopulation> PopulationList;
 };

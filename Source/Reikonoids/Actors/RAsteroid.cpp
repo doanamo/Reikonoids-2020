@@ -1,5 +1,7 @@
 #include "RAsteroid.h"
 #include "../Components/RHealthComponent.h"
+#include "../Gameplay/RGameMode.h"
+#include "../Gameplay/RSpawnDirector.h"
 #include <Components/SphereComponent.h>
 #include <Components/StaticMeshComponent.h>
 #include <Kismet/GameplayStatics.h>
@@ -95,6 +97,12 @@ void ARAsteroid::OnDeath()
         SpawnParams.bDeferConstruction = true;
 
         ARAsteroid* Asteroid = GetWorld()->SpawnActor<ARAsteroid>(this->GetClass(), SpawnParams);
+
+        // Register fractured asteroid in spawn director so its lifetime is managed.
+        if(ARGameMode* GameMode = GetWorld()->GetAuthGameMode<ARGameMode>())
+        {
+            GameMode->SpawnDirector->RegisterGenericActor(Asteroid);
+        }
 
         // Setup asteroid.
         Asteroid->FractureIndex = FractureIndex - 1;

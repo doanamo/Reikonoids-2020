@@ -16,25 +16,42 @@ void URSpawnDirector::OverrideMinSpawnRadiusOnNextUpdate(float Radius)
     OverrideIgnoreMinSpawnRadius = Radius;
 }
 
-void URSpawnDirector::SetupPopulationUpdate(UWorld* DirectedWorld)
+void URSpawnDirector::SetupPopulationUpdate(UWorld* InWorld)
 {
     // Save reference to world in which we will spawn actors.
-    World = DirectedWorld;
-
-    // Create population list based on spawn definitions.
-    for(auto& SpawnDefinition : SpawnDefinitions)
-    {
-        PopulationList.Emplace();
-    }
+    World = InWorld;
 
     // Setup population update at constant rate.
     FTimerManager& TimerManager = GetWorld()->GetTimerManager();
     TimerManager.SetTimer(UpdateTimer, this, &URSpawnDirector::UpdatePopulation, PopulationUpdateDelay, true, 0.0f);
 }
 
-void URSpawnDirector::SetSpawnOrigin(const FVector& NewSpawnOrigin)
+void URSpawnDirector::SetSpawnOrigin(const FVector& InSpawnOrigin)
 {
-    SpawnOrigin = NewSpawnOrigin;
+    SpawnOrigin = InSpawnOrigin;
+}
+
+void URSpawnDirector::RegisterGenericActor(AActor* Actor)
+{
+    check(Actor);
+
+    // Find generic population by actor class.
+    FRSpawnPopulation* Population = PopulationMap.Find(AActor::StaticClass());
+
+    if(!Population)
+    {
+        if(GEngine)
+        {
+            GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red,
+                FString::Printf(TEXT("Failed to register generic actor %s due to missing population"),
+                *Actor->GetName()));
+        }
+
+        return;
+    }
+
+    // Add actor to generic population list.
+    Population->Actors.Add(Actor);
 }
 
 void URSpawnDirector::UpdatePopulation()
@@ -42,14 +59,13 @@ void URSpawnDirector::UpdatePopulation()
     check(World != nullptr);
 
     // Iterate over populations.
-    check(PopulationList.Num() == SpawnDefinitions.Num());
-    for(int DefinitionIndex = 0; DefinitionIndex < SpawnDefinitions.Num(); ++DefinitionIndex)
+    for(auto& SpawnPopulationEntry : PopulationMap)
     {
-        const FRSpawnDefinition& Definition = SpawnDefinitions[DefinitionIndex];
-        FRSpawnPopulation& Population = PopulationList[DefinitionIndex];
+        const TSubclassOf<AActor>& ActorClass = SpawnPopulationEntry.Key;
+        FRSpawnPopulation& SpawnPopulation = SpawnPopulationEntry.Value;
 
         // Remove actors that have been destroyed.
-        for(auto Actor = Population.Actors.CreateIterator(); Actor; Actor++)
+        for(auto Actor = SpawnPopulation.Actors.CreateIterator(); Actor; Actor++)
         {
             if(*Actor == nullptr)
             {
@@ -58,11 +74,11 @@ void URSpawnDirector::UpdatePopulation()
         }
 
         // Despawn actors that are past despawn radius.
-        for(auto Actor = Population.Actors.CreateIterator(); Actor; Actor++)
+        for(auto Actor = SpawnPopulation.Actors.CreateIterator(); Actor; Actor++)
         {
             float DistanceSqr = FVector::DistSquared(SpawnOrigin, (*Actor)->GetActorLocation());
 
-            if(DistanceSqr > Definition.DespawnRadius * Definition.DespawnRadius)
+            if(DistanceSqr > SpawnPopulation.DespawnRadius * SpawnPopulation.DespawnRadius)
             {
                 (*Actor)->Destroy();
                 Actor.RemoveCurrent();
@@ -72,12 +88,12 @@ void URSpawnDirector::UpdatePopulation()
         // Spawn actors within spawn radius.
         if(SpawnEnabled)
         {
-            int SpawnsNeeded = Definition.SpawnCount - Population.Actors.Num();
+            int SpawnsNeeded = SpawnPopulation.SpawnCount - SpawnPopulation.Actors.Num();
             for(int SpawnIndex = 0; SpawnIndex < SpawnsNeeded; ++SpawnIndex)
             {
                 // Calculate random spawn location using uniformly randomized point on annulus.
-                float SpawnRadiusMin = OverrideIgnoreMinSpawnRadius >= 0.0f ? OverrideIgnoreMinSpawnRadius : Definition.SpawnRadiusMin;
-                float SpawnRadiusMax = FMath::Max(SpawnRadiusMin, Definition.SpawnRadiusMax);
+                float SpawnRadiusMin = OverrideIgnoreMinSpawnRadius >= 0.0f ? OverrideIgnoreMinSpawnRadius : SpawnPopulation.SpawnRadiusMin;
+                float SpawnRadiusMax = FMath::Max(SpawnRadiusMin, SpawnPopulation.SpawnRadiusMax);
 
                 float Theta = FMath::RandRange(0.0f, 360.0f);
                 float Distance = FMath::Sqrt(FMath::RandRange(0.0f, 1.0f) * (FMath::Square(SpawnRadiusMin) - FMath::Square(SpawnRadiusMax)) + FMath::Square(SpawnRadiusMax));
@@ -90,7 +106,7 @@ void URSpawnDirector::UpdatePopulation()
 
                 // Use random rotation if requested.
                 FRotator RandomRotation;
-                if(Definition.RandomizeRotation)
+                if(SpawnPopulation.RandomizeRotation)
                 {
                     RandomRotation.Yaw = FMath::RandRange(0.0f, 360.0f);
                 }
@@ -106,7 +122,7 @@ void URSpawnDirector::UpdatePopulation()
                 SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::DontSpawnIfColliding;
                 SpawnParams.bDeferConstruction = true;
 
-                if(AActor* SpawnedActor = World->SpawnActor<AActor>(Definition.ActorClass, SpawnTransform, SpawnParams))
+                if(AActor* SpawnedActor = World->SpawnActor<AActor>(ActorClass, SpawnTransform, SpawnParams))
                 {
                     if(GEngine)
                     {
@@ -120,12 +136,12 @@ void URSpawnDirector::UpdatePopulation()
                         // Defer actor registration to spawner as it will immediately destroy
                         // itself after spawning an actor which would otherwise not be registered.
                         // Passing population array is fine as long as we do not allow removal of populations.
-                        SpawnerActor->SetupDeferredSpawnRegistration(this, &Population.Actors);
+                        SpawnerActor->SetupDeferredSpawnRegistration(this, &SpawnPopulation.Actors);
                     }
                     else
                     {
                         // Register actor in population list.
-                        Population.Actors.Push(SpawnedActor);
+                        SpawnPopulation.Actors.Push(SpawnedActor);
                     }
 
                     UGameplayStatics::FinishSpawningActor(SpawnedActor, SpawnTransform);

@@ -3,7 +3,12 @@
 #include <Kismet/GameplayStatics.h>
 #include <Components/SphereComponent.h>
 
-URWeaponComponent::URWeaponComponent() = default;
+URWeaponComponent::URWeaponComponent()
+{
+    // Setup default shooting pattern.
+    FiringPattern.FireIndexCount = 1;
+    FiringPattern.FiringEntries.Add(FRProjectileFiringEntry());
+}
 
 void URWeaponComponent::StartFiring()
 {
@@ -29,26 +34,37 @@ void URWeaponComponent::FireProjectile()
 {
     check(ProjectileClass != nullptr);
 
-    // Spawn projectile.
-    FActorSpawnParameters SpawnParams;
-    SpawnParams.Instigator = Cast<APawn>(GetOwner());
-    SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-    SpawnParams.bDeferConstruction = true;
+    for(const auto& ShootingEntry : FiringPattern.FiringEntries)
+    {
+        // Check if entry is valid for current firing index.
+        if(ShootingEntry.FireIndex != FireCount % FiringPattern.FireIndexCount)
+            continue;
 
-    ARProjectile* Projectile = GetWorld()->SpawnActor<ARProjectile>(ProjectileClass, SpawnParams);
+        // Spawn projectile.
+        FActorSpawnParameters SpawnParams;
+        SpawnParams.Instigator = Cast<APawn>(GetOwner());
+        SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+        SpawnParams.bDeferConstruction = true;
 
-    // Setup projectile.
-    Projectile->Damage *= ProjectileDamageScale;
-    Projectile->PierceCount = ProjectilePierceCount;
+        ARProjectile* Projectile = GetWorld()->SpawnActor<ARProjectile>(ProjectileClass, SpawnParams);
 
-    FTransform SpawnTransform;
-    SpawnTransform.SetLocation(GetComponentLocation());
-    SpawnTransform.SetRotation(GetComponentQuat());
+        // Setup projectile.
+        Projectile->Damage *= ProjectileDamageScale;
+        Projectile->PierceCount = ProjectilePierceCount;
 
-    UGameplayStatics::FinishSpawningActor(Projectile, SpawnTransform);
+        FTransform SpawnTransform;
+        SpawnTransform.SetLocation(ShootingEntry.Location);
+        SpawnTransform.SetRotation(ShootingEntry.Rotation.Quaternion());
+        SpawnTransform = SpawnTransform * GetComponentToWorld();
+ 
+        UGameplayStatics::FinishSpawningActor(Projectile, SpawnTransform);
+    }
 
     // Broadcast weapon fired event.
     OnWeaponFired.Broadcast();
+
+    // Increment fire index.
+    FireCount += 1;
 
     // Start new timer.
     FTimerManager& TimerManager = GetWorld()->GetTimerManager();

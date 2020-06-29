@@ -4,7 +4,7 @@
 
 URModifier_ProjectilePiercing::URModifier_ProjectilePiercing()
 {
-    URModifier_Base::Name = NSLOCTEXT("Modifier", "ProjecitlePiercing", "Projectile Piercing");
+    URModifier_Base::Name = NSLOCTEXT("Modifier", "ProjectilePiercing", "Projectile Piercing");
     URModifier_Base::InitialDuration = 10.0f;
 }
 

@@ -47,9 +47,16 @@ void ARProjectile::OnActorBeginOverlap(AActor* OverlappedActor, AActor* OtherAct
     if(IsActorBeingDestroyed())
         return;
 
-    // Do not damage self.
+    // Do not damage actor who fired this projectile.
     if(GetInstigator() == OtherActor)
         return;
+
+    // Ignore overlap with other projectiles from same instigator.
+    if(GetInstigator() == OtherActor->GetInstigator())
+    {
+        if(ARProjectile* OtherPojectile = Cast<ARProjectile>(OtherActor))
+            return;
+    }
 
     // Check if overlapped an ignored actor.
     if(IgnoredActors.Find(OtherActor) != INDEX_NONE)

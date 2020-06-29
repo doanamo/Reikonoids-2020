@@ -15,9 +15,6 @@ class REIKONOIDS_API ARAsteroid : public AActor
 public:
     virtual ~ARAsteroid();
 
-    void ApplyRandomTorque();
-    void ApplyRandomVelocity();
-
     UPROPERTY(EditDefaultsOnly)
     int FractureIndex = 3;
 
@@ -26,6 +23,12 @@ public:
 
     UPROPERTY(EditDefaultsOnly)
     float FractureScale = 0.5f;
+
+    UPROPERTY(EditDefaultsOnly)
+    bool ApplyRandomTorque = true;
+
+    UPROPERTY(EditDefaultsOnly)
+    bool ApplyRandomVelocity = true;
 
     UPROPERTY(EditDefaultsOnly)
     FVector MaxRandomTorque = FVector(100.0f, 100.0f, 100.0f);
@@ -44,6 +47,9 @@ public:
 
 protected:
     ARAsteroid();
+
+    FVector RandomizeTorque() const;
+    FVector RandomizeVelocity() const;
 
     virtual void BeginPlay() override;
 

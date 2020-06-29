@@ -51,7 +51,7 @@ void URSpawnDirector::UpdatePopulation()
         // Remove actors that have been destroyed.
         for(auto Actor = Population.Actors.CreateIterator(); Actor; Actor++)
         {
-            if(*Actor == nullptr || (*Actor)->IsActorBeingDestroyed())
+            if(*Actor == nullptr)
             {
                 Actor.RemoveCurrent();
             }

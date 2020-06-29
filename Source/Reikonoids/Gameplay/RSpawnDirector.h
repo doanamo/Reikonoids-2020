@@ -32,8 +32,12 @@ struct REIKONOIDS_API FRSpawnDefinition
     bool RandomizeRotation = false;
 };
 
-struct FRSpawnPopulation
+USTRUCT()
+struct REIKONOIDS_API FRSpawnPopulation
 {
+    GENERATED_BODY()
+
+    UPROPERTY()
     TArray<AActor*> Actors;
 };
 
@@ -66,6 +70,8 @@ private:
     UWorld* World = nullptr;
     FTimerHandle UpdateTimer;
     FVector SpawnOrigin = FVector::ZeroVector;
-    TArray<FRSpawnPopulation> PopulationList;
     float OverrideIgnoreMinSpawnRadius = -1.0f;
+
+    UPROPERTY()
+    TArray<FRSpawnPopulation> PopulationList;
 };

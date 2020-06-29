@@ -23,6 +23,9 @@ public:
     UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
     float CurrentHealth = FullHealth;
 
+    UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
+    float DamageScale = 1.0f;
+
     UPROPERTY(BlueprintAssignable)
     FOnHealthChangeSignature OnHealthChange;
 

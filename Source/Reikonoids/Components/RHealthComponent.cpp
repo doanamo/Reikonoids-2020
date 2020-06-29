@@ -35,28 +35,39 @@ void URHealthComponent::BeginPlay()
 
 void URHealthComponent::OnTakeAnyDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser)
 {
-    if(IsDead() || Damage == 0.0f)
+    if(IsDead())
+        return;
+
+    // Calculate scaled damage.
+    float ScaledDamage = Damage;
+
+    if(Damage > 0.0f)
+    {
+        ScaledDamage *= DamageScale;
+    }
+
+    if(FMath::IsNearlyZero(ScaledDamage))
         return;
 
     // Print debug damage info.
     if(GEngine)
     {
-        if(Damage > 0.0f)
+        if(ScaledDamage > 0.0f)
         {
             GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Yellow,
                 FString::Printf(TEXT("%s received %f damage from %s"),
-                *GetOwner()->GetName(), Damage, *DamageCauser->GetName()));
+                *GetOwner()->GetName(), ScaledDamage, *DamageCauser->GetName()));
         }
         else
         {
             GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Yellow,
                 FString::Printf(TEXT("%s received %f healing from %s"),
-                *GetOwner()->GetName(), -Damage, *DamageCauser->GetName()));
+                *GetOwner()->GetName(), -ScaledDamage, *DamageCauser->GetName()));
         }
     }
 
     // Update current health value.
-    float UpdatedHealth = FMath::Clamp(CurrentHealth - Damage, 0.0f, MaximumHealth);
+    float UpdatedHealth = FMath::Clamp(CurrentHealth - ScaledDamage, 0.0f, MaximumHealth);
 
     if(UpdatedHealth != CurrentHealth)
     {

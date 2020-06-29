@@ -1,6 +1,7 @@
 #include "RWeaponComponent.h"
 #include "../Actors/RProjectile.h"
 #include <Kismet/GameplayStatics.h>
+#include <Components/SphereComponent.h>
 
 URWeaponComponent::URWeaponComponent() = default;
 
@@ -38,6 +39,7 @@ void URWeaponComponent::FireProjectile()
 
     // Setup projectile.
     Projectile->Damage *= ProjectileDamageScale;
+    Projectile->PierceCount = ProjectilePierceCount;
 
     FTransform SpawnTransform;
     SpawnTransform.SetLocation(GetComponentLocation());

@@ -47,12 +47,31 @@ void ARProjectile::OnActorBeginOverlap(AActor* OverlappedActor, AActor* OtherAct
     if(IsActorBeingDestroyed())
         return;
 
-    // Destroy projectile.
-    ensure(Destroy());
+    // Do not damage self.
+    if(GetInstigator() == OtherActor)
+        return;
+
+    // Check if overlapped an ignored actor.
+    if(IgnoredActors.Find(OtherActor) != INDEX_NONE)
+        return;
 
     // Make overlapped actor receive damage.
     FDamageEvent DamageEvent;
     OtherActor->TakeDamage(Damage, DamageEvent, nullptr, this);
+
+    // Handle projectile piercing.
+    if(PierceCount > 0)
+    {
+        PierceCount -= 1;
+
+        // Ignore actor pair to prevent repeating overlap event.
+        IgnoredActors.Add(OtherActor);
+    }
+    else
+    {
+        // Destroy projectile.
+        ensure(Destroy());
+    }
 }
 
 void ARProjectile::OnExpire()

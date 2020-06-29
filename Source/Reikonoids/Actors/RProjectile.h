@@ -17,6 +17,9 @@ public:
     float Damage = 10.0f;
 
     UPROPERTY(EditDefaultsOnly)
+    int PierceCount = 0;
+
+    UPROPERTY(EditDefaultsOnly)
     float LifeTime = 3.0f;
 
     UPROPERTY(EditDefaultsOnly)
@@ -40,4 +43,7 @@ protected:
 
 private:
     FTimerHandle LifetimeTimer;
+
+    UPROPERTY()
+    TArray<AActor*> IgnoredActors;
 };

@@ -19,13 +19,15 @@ public:
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
     float ProjectileDamageScale = 1.0f;
 
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+    int ProjectilePierceCount = 0;
+
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     float FireRatePerSecond = 1.0f;
 
     UPROPERTY(BlueprintAssignable)
     FOnWeaponFiredSignature OnWeaponFired;
 
-public:
     URWeaponComponent();
 
     void StartFiring();
@@ -34,6 +36,5 @@ public:
 private:
     void FireProjectile();
 
-private:
     FTimerHandle FireTimer;
 };

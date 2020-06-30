@@ -110,6 +110,7 @@ void ARAsteroid::OnDeath()
         Asteroid->SphereCollision->SetSphereRadius(SphereCollision->GetUnscaledSphereRadius() * FractureScale);
         Asteroid->SphereCollision->SetMassScale(NAME_None, SphereCollision->GetMassScale() * FractureScale);
         Asteroid->StaticMesh->SetWorldScale3D(StaticMesh->GetComponentScale() * FractureScale);
+        Asteroid->HealthComponent->MaximumHealth = HealthComponent->MaximumHealth * FractureScale;
 
         Asteroid->ApplyRandomVelocity = false;
         Asteroid->SphereCollision->AddImpulse(ModifiedVelocity, NAME_None, true);

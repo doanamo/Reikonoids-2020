@@ -59,4 +59,5 @@ protected:
     void OnDeath();
 
     float ForwardMovementInput = 0.0f;
+    float YawRotationInput = 0.0f;
 };

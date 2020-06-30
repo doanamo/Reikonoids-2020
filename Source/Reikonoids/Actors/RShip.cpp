@@ -60,6 +60,9 @@ void ARShip::Tick(float DeltaTime)
 
     // Apply physical movement impulse.
     SphereCollision->AddImpulse(GetActorForwardVector() * MovementImpulseSize * ForwardMovementInput * DeltaTime);
+
+    // Apply controller rotation input.
+    AddControllerYawInput(YawRotationInput);
 }
 
 void ARShip::FaceRotation(FRotator NewControlRotation, float DeltaTime)
@@ -85,14 +88,10 @@ void ARShip::StopFiring()
 
 void ARShip::MoveForward(float AxisScale)
 {
-    // Allow only forward movement.
-    if(AxisScale >= 0.0f)
-    {
-        ForwardMovementInput = AxisScale;
-    }
+    ForwardMovementInput = FMath::Clamp(AxisScale, 0.0f, 1.0f);
 }
 
 void ARShip::RotateRight(float AxisScale)
 {
-    AddControllerYawInput(AxisScale);
+    YawRotationInput = FMath::Clamp(AxisScale, -1.0f, 1.0f);
 }

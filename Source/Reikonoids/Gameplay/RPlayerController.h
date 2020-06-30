@@ -16,6 +16,7 @@ protected:
     ARPlayerController();
 
     virtual void OnPossess(APawn* PossesedPawn) override;
+    virtual void UpdateRotation(float DeltaTime) override;
     virtual void OnUnPossess() override;
     virtual void BeginDestroy() override;
 

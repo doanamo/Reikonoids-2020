@@ -50,6 +50,7 @@ void URHealthComponent::OnTakeAnyDamage(AActor* DamagedActor, float Damage, cons
         return;
 
     // Print debug damage info.
+#ifdef WITH_EDITOR
     if(GEngine)
     {
         if(ScaledDamage > 0.0f)
@@ -65,6 +66,7 @@ void URHealthComponent::OnTakeAnyDamage(AActor* DamagedActor, float Damage, cons
                 *GetOwner()->GetName(), -ScaledDamage, *DamageCauser->GetName()));
         }
     }
+#endif
 
     // Update current health value.
     float UpdatedHealth = FMath::Clamp(CurrentHealth - ScaledDamage, 0.0f, MaximumHealth);

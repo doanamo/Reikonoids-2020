@@ -34,12 +34,14 @@ void URModifierStackComponent::TickComponent(float DeltaTime, enum ELevelTick Ti
             DiscardedModifier->Revert();
 
             // Print debug modifier info.
+#ifdef WITH_EDITOR
             if(GEngine)
             {
                 GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Yellow,
                     FString::Printf(TEXT("%s lost %s modifier"),
                     *GetOwner()->GetName(), *DiscardedModifier->GetName()));
             }
+#endif
         }
     }
 
@@ -82,6 +84,7 @@ bool URModifierStackComponent::ApplyModifier(URModifier_Base* Modifier)
                     DiscardedModifier->Revert();
 
                     // Print debug modifier info.
+#ifdef WITH_EDITOR
                     if(GEngine)
                     {
                         GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Yellow,
@@ -89,6 +92,7 @@ bool URModifierStackComponent::ApplyModifier(URModifier_Base* Modifier)
                                 *GetOwner()->GetName(), *DiscardedModifier->GetName()));
                     }
                 }
+#endif
 
                 break;
             }
@@ -114,12 +118,14 @@ bool URModifierStackComponent::ApplyModifier(URModifier_Base* Modifier)
     ModifierStack.Add(Modifier);
 
     // Print debug modifier info.
+#ifdef WITH_EDITOR
     if(GEngine)
     {
         GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Yellow,
             FString::Printf(TEXT("%s gained %s modifier"),
             *GetOwner()->GetName(), *Modifier->GetName()));
     }
+#endif
 
     return true;
 }

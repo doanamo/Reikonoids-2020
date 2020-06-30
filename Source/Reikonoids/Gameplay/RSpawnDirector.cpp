@@ -40,12 +40,14 @@ void URSpawnDirector::RegisterGenericActor(AActor* Actor)
 
     if(!Population)
     {
+#ifdef WITH_EDITOR
         if(GEngine)
         {
             GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red,
                 FString::Printf(TEXT("Failed to register generic actor %s due to missing population"),
                 *Actor->GetName()));
         }
+#endif
 
         return;
     }
@@ -124,12 +126,14 @@ void URSpawnDirector::UpdatePopulation()
 
                 if(AActor* SpawnedActor = World->SpawnActor<AActor>(ActorClass, SpawnTransform, SpawnParams))
                 {
+#ifdef WITH_EDITOR
                     if(GEngine)
                     {
                         GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Yellow,
                             FString::Printf(TEXT("Spawn director spawned %s at distance of %f units"),
                             *SpawnedActor->GetName(), FVector::Dist(SpawnOrigin, RandomLocation)));
                     }
+#endif
 
                     if(ARSpawner* SpawnerActor = Cast<ARSpawner>(SpawnedActor))
                     {

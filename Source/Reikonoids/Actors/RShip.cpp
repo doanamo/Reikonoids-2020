@@ -3,12 +3,16 @@
 #include "../Components/RModifierStackComponent.h"
 #include "../Components/RWeaponComponent.h"
 #include <Components/SphereComponent.h>
+#include <GameFramework/Actor.h>
 
 ARShip::ARShip()
 {
     // Use controller rotation.
     bUseControllerRotationPitch = true;
     bUseControllerRotationYaw = true;
+
+    // Auto posses when spawn director spawns this actor.
+    AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 
     // Setup sphere collision component.
     SphereCollision = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
@@ -54,9 +58,14 @@ void ARShip::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
 
-    // Apply physical movement.
-    FVector MovementInput = ConsumeMovementInputVector();
-    SphereCollision->AddImpulse(MovementInput * MovementImpulseSize);
+    // Apply physical movement impulse.
+    SphereCollision->AddImpulse(GetActorForwardVector() * MovementImpulseSize * ForwardMovementInput * DeltaTime);
+}
+
+void ARShip::FaceRotation(FRotator NewControlRotation, float DeltaTime)
+{
+    // Smoothly change rotation when adjusting pawn to face controller's rotation.
+    SetActorRotation(FMath::RInterpTo(GetActorRotation(), NewControlRotation, DeltaTime, 4.0f));
 }
 
 void ARShip::OnDeath()
@@ -77,9 +86,9 @@ void ARShip::StopFiring()
 void ARShip::MoveForward(float AxisScale)
 {
     // Allow only forward movement.
-    if(AxisScale > 0.0f)
+    if(AxisScale >= 0.0f)
     {
-        AddMovementInput(GetActorForwardVector() * AxisScale);
+        ForwardMovementInput = AxisScale;
     }
 }
 

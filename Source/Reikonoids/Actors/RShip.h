@@ -29,7 +29,7 @@ public:
     void RotateRight(float AxisScale);
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-    float MovementImpulseSize = 500.0f;
+    float MovementImpulseSize = 50000.0f;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
     float LinearDampingForce = 1.0f;
@@ -53,6 +53,10 @@ protected:
     virtual void BeginPlay() override;
     virtual void Tick(float DeltaTime) override;
 
+    virtual void FaceRotation(FRotator NewControlRotation, float DeltaTime) override;
+
     UFUNCTION()
     void OnDeath();
+
+    float ForwardMovementInput = 0.0f;
 };

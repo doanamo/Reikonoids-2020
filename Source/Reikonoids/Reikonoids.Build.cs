@@ -7,6 +7,6 @@ public class Reikonoids : ModuleRules
         PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
         PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore" });
-        PrivateDependencyModuleNames.AddRange(new string[] { "UMG", "Slate", "SlateCore" });
+        PrivateDependencyModuleNames.AddRange(new string[] { "AIModule", "GameplayTasks", "UMG", "Slate", "SlateCore" });
     }
 }

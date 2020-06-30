@@ -13,6 +13,8 @@ class REIKONOIDS_API ARPlayerController : public APlayerController
     GENERATED_BODY()
 
 public:
+    virtual ~ARPlayerController();
+
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     TSubclassOf<AActor> CameraAttachmentClass;
 

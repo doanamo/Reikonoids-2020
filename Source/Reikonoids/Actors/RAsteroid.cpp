@@ -75,7 +75,7 @@ void ARAsteroid::OnDeath(AController* InstigatedBy)
     }
 
     // Get current velocity before we destroy this actor.
-    // It gets immediately cleared to zeros when destroying it.
+    // It seems to be immediately cleared to zeros after calling Destroy().
     FVector CurrentVelocity = SphereCollision->GetComponentVelocity();
 
     // Destroy asteroid actor before fracturing.
@@ -113,7 +113,7 @@ void ARAsteroid::OnDeath(AController* InstigatedBy)
             GameMode->SpawnDirector->RegisterGenericActor(Asteroid);
         }
 
-        // Setup asteroid.
+        // Setup asteroid parameters.
         Asteroid->FractureIndex = FractureIndex - 1;
         Asteroid->FractureCount = FractureCount + 1;
         Asteroid->DestructionScore = DestructionScore * FractureScale;
@@ -122,9 +122,11 @@ void ARAsteroid::OnDeath(AController* InstigatedBy)
         Asteroid->StaticMesh->SetWorldScale3D(StaticMesh->GetComponentScale() * FractureScale);
         Asteroid->HealthComponent->MaximumHealth = HealthComponent->MaximumHealth * FractureScale;
 
+        // Inherit portion of original asteroid's velocity.
         Asteroid->ApplyRandomVelocity = false;
         Asteroid->SphereCollision->AddImpulse(ModifiedVelocity, NAME_None, true);
 
+        // Finish spawning.
         FTransform SpawnTranform;
         SpawnTranform.SetLocation(RandomLocation);
         UGameplayStatics::FinishSpawningActor(Asteroid, SpawnTranform);

@@ -6,6 +6,8 @@ ARPlayerController::ARPlayerController()
     bAutoManageActiveCameraTarget = false;
 }
 
+ARPlayerController::~ARPlayerController() = default;
+
 void ARPlayerController::SetupInputComponent()
 {
     Super::SetupInputComponent();
@@ -54,7 +56,7 @@ void ARPlayerController::OnPossess(APawn* PossesedPawn)
 void ARPlayerController::UpdateRotation(float DeltaTime)
 {
     // Hack fix for shipping configuration having too quick rotations because of following UE4 issues:
-    // - Shipping configuration has framerate cap disabled, while in Debug/Development there is 120FPS limit (why?!).
+    // - Shipping configuration has framerate cap disabled, while in Debug/Development there is 120FPS limit.
     // - Having bUseControllerRotationYaw=true results in controller rotating pawn every tick without accounting for delta time.
     RotationInput *= DeltaTime * 120.0f;
 

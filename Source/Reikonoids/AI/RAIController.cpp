@@ -33,16 +33,6 @@ void ARAIController::OnPossess(APawn* PossesedPawn)
     RunBehaviorTree(BehaviorTree);
 }
 
-void ARAIController::Tick(float DeltaTime)
-{
-    Super::Tick(DeltaTime);
-}
-
-void ARAIController::OnUnPossess()
-{
-    Super::OnUnPossess();
-}
-
 void ARAIController::OnSeePawn(APawn* SeenPawn)
 {
     if(UBlackboardComponent* BlackboardComponent = GetBlackboardComponent())

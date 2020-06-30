@@ -11,6 +11,8 @@ class REIKONOIDS_API URModifier_Base : public UObject
     GENERATED_BODY()
 
 public:
+    virtual ~URModifier_Base();
+
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
     FText Name = NSLOCTEXT("Modifier", "Unnamed", "Unnamed");
 
@@ -20,11 +22,8 @@ public:
     UPROPERTY(EditDefaultsOnly)
     bool ReplaceExisting = true;
 
-    virtual ~URModifier_Base();
-
 protected:
     friend class URModifierStackComponent;
-
     URModifier_Base();
 
     virtual bool Apply(AActor* ModifiedActor);

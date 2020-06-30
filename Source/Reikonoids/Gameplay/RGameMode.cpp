@@ -7,6 +7,8 @@ ARGameMode::ARGameMode()
     SpawnDirector = CreateDefaultSubobject<URSpawnDirector>(TEXT("SpawnDirector"));
 }
 
+ARGameMode::~ARGameMode() = default;
+
 void ARGameMode::BeginPlay()
 {
     Super::BeginPlay();
@@ -20,7 +22,7 @@ void ARGameMode::Tick(float DeltaSeconds)
 {
     Super::Tick(DeltaSeconds);
 
-    // Move director's spawn origin.
+    // Move spawn origin.
     APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
     if(APawn* Pawn = PlayerController->GetPawn())
     {

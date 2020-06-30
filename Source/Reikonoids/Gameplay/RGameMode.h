@@ -11,6 +11,8 @@ class REIKONOIDS_API ARGameMode : public AGameMode
     GENERATED_BODY()
 
 public:
+    virtual ~ARGameMode();
+
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Instanced)
     URSpawnDirector* SpawnDirector = nullptr;
 

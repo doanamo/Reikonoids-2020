@@ -18,10 +18,10 @@ public:
     UPROPERTY(Instanced, EditDefaultsOnly, BlueprintReadOnly)
     URModifier_Base* Modifier = nullptr;
 
-    UPROPERTY(VisibleAnywhere)
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
     USphereComponent* SphereCollision = nullptr;
 
-    UPROPERTY(VisibleAnywhere)
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
     UStaticMeshComponent* StaticMesh = nullptr;
 
 protected:

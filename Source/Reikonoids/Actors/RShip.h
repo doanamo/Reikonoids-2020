@@ -62,6 +62,7 @@ protected:
     UFUNCTION()
     void OnDeath(AController* InstigatedBy);
 
+private:
     float ForwardMovementInput = 0.0f;
     float YawRotationInput = 0.0f;
 };

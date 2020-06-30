@@ -11,13 +11,13 @@ class REIKONOIDS_API ARHUD : public AHUD
     GENERATED_BODY()
 
 public:
+    virtual ~ARHUD();
+
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
     TSubclassOf<UUserWidget> WidgetClass;
 
     UPROPERTY()
     UUserWidget* Widget = nullptr;
-
-    virtual ~ARHUD();
 
 protected:
     ARHUD();

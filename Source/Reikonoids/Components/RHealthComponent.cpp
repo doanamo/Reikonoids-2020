@@ -18,7 +18,7 @@ void URHealthComponent::InitializeComponent()
         CurrentHealth = MaximumHealth;
     }
 
-    // Hook component to game framework's delegate called when actor receives damage.
+    // Hook component to game framework's damage event system.
     GetOwner()->OnTakeAnyDamage.AddDynamic(this, &URHealthComponent::OnTakeAnyDamage);
 }
 

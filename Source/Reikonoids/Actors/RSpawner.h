@@ -10,10 +10,10 @@ struct REIKONOIDS_API FRSpawnerEntry
 {
     GENERATED_BODY()
 
-    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
     TSubclassOf<AActor> Class;
 
-    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
     float Weight = 1.0f;
 };
 
@@ -23,10 +23,10 @@ class REIKONOIDS_API ARSpawner : public AActor
     GENERATED_BODY()
 
 public:
+    virtual ~ARSpawner();
+
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
     TArray<FRSpawnerEntry> Entries;
-
-    virtual ~ARSpawner();
 
     void SetupDeferredSpawnRegistration(URSpawnDirector* InSpawnDirector, TArray<AActor*>* InPopulation);
 
@@ -36,6 +36,8 @@ protected:
     virtual void BeginPlay() override;
 
 private:
+    // Below pointers to properties should remain
+    // valid as long as global game mode exists.
     URSpawnDirector* SpawnDirector = nullptr;
     TArray<AActor*>* Population = nullptr;
 };

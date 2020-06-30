@@ -96,7 +96,7 @@ void URSpawnDirector::UpdatePopulation()
             int SpawnsNeeded = (int)SpawnPopulation.SpawnCount - SpawnPopulation.Actors.Num();
             for(int SpawnIndex = 0; SpawnIndex < SpawnsNeeded; ++SpawnIndex)
             {
-                // Calculate random spawn location using uniformly randomized point on annulus.
+                // Calculate random spawn location using uniformly randomized point on annulus (think of flattened donut).
                 float SpawnRadiusMin = OverrideIgnoreMinSpawnRadius >= 0.0f ? OverrideIgnoreMinSpawnRadius : SpawnPopulation.SpawnRadiusMin;
                 float SpawnRadiusMax = FMath::Max(SpawnRadiusMin, SpawnPopulation.SpawnRadiusMax);
 
@@ -116,7 +116,7 @@ void URSpawnDirector::UpdatePopulation()
                     RandomRotation.Yaw = FMath::RandRange(0.0f, 360.0f);
                 }
 
-                // Spawn actor.
+                // Spawn population actor.
                 // Deferred construction is needed otherwise actors such as spawners that
                 // destroy themselves immediatelly will result in SpawnActor() returning nullptr.
                 FTransform SpawnTransform;
@@ -140,8 +140,8 @@ void URSpawnDirector::UpdatePopulation()
 
                     if(ARSpawner* SpawnerActor = Cast<ARSpawner>(SpawnedActor))
                     {
-                        // Defer actor registration to spawner as it will immediately destroy
-                        // itself after spawning an actor which would otherwise not be registered.
+                        // Defer actor registration to spawner as it will immediately
+                        // destroy itself after spawning an actor which would not be registered.
                         // Passing population array is fine as long as we do not allow removal of populations.
                         SpawnerActor->SetupDeferredSpawnRegistration(this, &SpawnPopulation.Actors);
                     }
@@ -157,6 +157,6 @@ void URSpawnDirector::UpdatePopulation()
         }
     }
 
-    // Toggle minimum spawn radius override off after update.
+    // Toggle minimum spawn radius override off after an update.
     OverrideIgnoreMinSpawnRadius = -1.0f;
 }

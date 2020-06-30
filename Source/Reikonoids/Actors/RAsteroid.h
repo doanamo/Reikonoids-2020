@@ -39,13 +39,13 @@ public:
     UPROPERTY(EditDefaultsOnly)
     FVector MaxRandomVelocity = FVector(100.0f, 100.0f, 100.0f);
 
-    UPROPERTY(VisibleAnywhere)
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
     USphereComponent* SphereCollision = nullptr;
 
-    UPROPERTY(VisibleAnywhere)
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
     UStaticMeshComponent* StaticMesh = nullptr;
 
-    UPROPERTY(VisibleAnywhere)
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
     URHealthComponent* HealthComponent = nullptr;
 
 protected:

@@ -17,19 +17,14 @@ public:
     UPROPERTY(EditDefaultsOnly)
     UBehaviorTree* BehaviorTree = nullptr;
 
-    UPROPERTY(VisibleAnywhere)
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
     UPawnSensingComponent* PawnSensingComponent = nullptr;
 
 protected:
     ARAIController();
 
     virtual void OnPossess(APawn* PossesedPawn) override;
-    virtual void Tick(float DeltaTime) override;
-    virtual void OnUnPossess() override;
 
     UFUNCTION()
     void OnSeePawn(APawn* SeenPawn);
-
-private:
-
 };

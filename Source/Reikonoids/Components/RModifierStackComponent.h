@@ -15,7 +15,7 @@ public:
 
     bool ApplyModifier(URModifier_Base* Modifier);
 
-private:
+protected:
     virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
     UPROPERTY()

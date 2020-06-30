@@ -68,7 +68,7 @@ void ARShip::Tick(float DeltaTime)
 
 void ARShip::FaceRotation(FRotator NewControlRotation, float DeltaTime)
 {
-    // Smoothly change rotation when adjusting pawn to face controller's rotation.
+    // Smoothly change rotation when adjusting pawn to controller's rotation.
     SetActorRotation(FMath::RInterpTo(GetActorRotation(), NewControlRotation, DeltaTime, 4.0f));
 }
 

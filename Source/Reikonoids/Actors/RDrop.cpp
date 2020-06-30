@@ -60,7 +60,7 @@ void ARDrop::OnActorBeginOverlap(AActor* OverlappedActor, AActor* OtherActor)
             Modifier = nullptr;
         }
 
-        // Destroy drop.
+        // Destroy drop actor.
         ensure(Destroy());
     }
 }

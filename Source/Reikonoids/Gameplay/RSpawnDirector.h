@@ -13,22 +13,22 @@ struct REIKONOIDS_API FRSpawnPopulation
 {
     GENERATED_BODY()
 
-    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+    UPROPERTY(EditDefaultsOnly)
     float SpawnRadiusMin = 4000.0f;
 
-    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+    UPROPERTY(EditDefaultsOnly)
     float SpawnRadiusMax = 6000.0f;
 
-    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+    UPROPERTY(EditDefaultsOnly)
     float DespawnRadius = 7000.0f;
     
-    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+    UPROPERTY(EditDefaultsOnly)
     float SpawnCount = 100.0f;
 
-    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+    UPROPERTY(EditDefaultsOnly)
     float SpawnCountIncreasePerSecond = 0.0f;
 
-    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+    UPROPERTY(EditDefaultsOnly)
     bool RandomizeRotation = false;
 
     UPROPERTY()
@@ -41,6 +41,9 @@ class REIKONOIDS_API URSpawnDirector : public UObject
     GENERATED_BODY()
 
 public:
+    URSpawnDirector();
+    ~URSpawnDirector();
+
     UFUNCTION(BlueprintCallable)
     void ToggleSpawning(bool Enabled);
 
@@ -49,9 +52,6 @@ public:
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
     float PopulationUpdateDelay = 1.0f;
-
-    URSpawnDirector();
-    ~URSpawnDirector();
 
     void SetSpawnOrigin(const FVector& InSpawnOrigin);
     void OverrideMinSpawnRadiusOnNextUpdate(float Radius);

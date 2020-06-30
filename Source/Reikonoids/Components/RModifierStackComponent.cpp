@@ -33,8 +33,8 @@ void URModifierStackComponent::TickComponent(float DeltaTime, enum ELevelTick Ti
             URModifier_Base* DiscardedModifier = ModifierStack.Pop();
             DiscardedModifier->Revert();
 
-            // Print debug modifier info.
 #ifdef WITH_EDITOR
+            // Print debug modifier info.
             if(GEngine)
             {
                 GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Yellow,
@@ -45,7 +45,7 @@ void URModifierStackComponent::TickComponent(float DeltaTime, enum ELevelTick Ti
         }
     }
 
-    // Apply reverted modifiers again.
+    // Apply reverted modifiers back.
     for(int ApplyIndex = RevertedModifers.Num() - 1; ApplyIndex >= 0; --ApplyIndex)
     {
         URModifier_Base* RevertedModifier = RevertedModifers.Pop();
@@ -68,7 +68,6 @@ bool URModifierStackComponent::ApplyModifier(URModifier_Base* Modifier)
             if(ModifierStack[ModifierIndex]->GetClass() == Modifier->GetClass())
             {
                 // Discard modifier that was found to have same class.
-
                 for(int DiscardIndex = ModifierStack.Num() - 1; DiscardIndex >= 0; --DiscardIndex)
                 {
                     // Revert modifiers on stack above one that will be discarded.
@@ -83,16 +82,16 @@ bool URModifierStackComponent::ApplyModifier(URModifier_Base* Modifier)
                     URModifier_Base* DiscardedModifier = ModifierStack.Pop();
                     DiscardedModifier->Revert();
 
-                    // Print debug modifier info.
 #ifdef WITH_EDITOR
+                    // Print debug modifier info.
                     if(GEngine)
                     {
                         GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Yellow,
                             FString::Printf(TEXT("%s lost %s modifier"),
                                 *GetOwner()->GetName(), *DiscardedModifier->GetName()));
                     }
-                }
 #endif
+                }
 
                 break;
             }
@@ -117,8 +116,8 @@ bool URModifierStackComponent::ApplyModifier(URModifier_Base* Modifier)
     // Add modifier to the stack.
     ModifierStack.Add(Modifier);
 
-    // Print debug modifier info.
 #ifdef WITH_EDITOR
+    // Print debug modifier info.
     if(GEngine)
     {
         GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Yellow,
@@ -127,5 +126,6 @@ bool URModifierStackComponent::ApplyModifier(URModifier_Base* Modifier)
     }
 #endif
 
+    // Success!
     return true;
 }

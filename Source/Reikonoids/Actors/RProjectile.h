@@ -25,7 +25,7 @@ public:
     UPROPERTY(EditDefaultsOnly)
     float Speed = 1000.0f;
 
-    UPROPERTY(VisibleAnywhere)
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
     USphereComponent* SphereCollision = nullptr;
 
 protected:

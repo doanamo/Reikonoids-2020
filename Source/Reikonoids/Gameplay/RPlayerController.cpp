@@ -6,6 +6,23 @@ ARPlayerController::ARPlayerController()
     bAutoManageActiveCameraTarget = false;
 }
 
+void ARPlayerController::SetupInputComponent()
+{
+    Super::SetupInputComponent();
+
+    InputComponent->BindAction("Exit", IE_Pressed, this, &ARPlayerController::Exit);
+    InputComponent->BindAction("Proceed", IE_Pressed, this, &ARPlayerController::Proceed);
+}
+
+void ARPlayerController::Exit()
+{
+    FGenericPlatformMisc::RequestExit(false);
+}
+
+void ARPlayerController::Proceed()
+{
+}
+
 void ARPlayerController::OnPossess(APawn* PossesedPawn)
 {
     Super::OnPossess(PossesedPawn);

@@ -3,6 +3,8 @@
 #include <GameFramework/PlayerController.h>
 #include "RPlayerController.generated.h"
 
+class UInputComponent;
+
 UCLASS()
 class REIKONOIDS_API ARPlayerController : public APlayerController
 {
@@ -15,6 +17,10 @@ public:
 protected:
     ARPlayerController();
 
+    void Exit();
+    void Proceed();
+
+    virtual void SetupInputComponent() override;
     virtual void OnPossess(APawn* PossesedPawn) override;
     virtual void UpdateRotation(float DeltaTime) override;
     virtual void OnUnPossess() override;

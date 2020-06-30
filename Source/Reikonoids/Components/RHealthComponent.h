@@ -4,7 +4,7 @@
 #include "RHealthComponent.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnHealthChangeSignature, float, CurrentHealth, float, MaximumHealth);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDeathSignature);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnDeathSignature, AController*, InstigatedBy);
 
 UCLASS()
 class REIKONOIDS_API URHealthComponent : public UActorComponent

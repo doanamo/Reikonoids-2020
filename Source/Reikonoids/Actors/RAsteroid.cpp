@@ -63,12 +63,15 @@ FVector ARAsteroid::RandomizeVelocity() const
     return RandomVelocity;
 }
 
-void ARAsteroid::OnDeath()
+void ARAsteroid::OnDeath(AController* InstigatedBy)
 {
-    // Increase score for destroying this asteroid.
+    // Increase player score for destroying this asteroid.
     if(ARGameMode* GameMode = GetWorld()->GetAuthGameMode<ARGameMode>())
     {
-        GameMode->PlayerScore += DestructionScore;
+        if(InstigatedBy == GetWorld()->GetFirstPlayerController())
+        {
+            GameMode->PlayerScore += DestructionScore;
+        }
     }
 
     // Get current velocity before we destroy this actor.

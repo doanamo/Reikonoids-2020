@@ -32,5 +32,3 @@ class REIKONOIDS_API URBehaviorTreeTask_StopFiring : public UBTTaskNode
 public:
     virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 };
-
-

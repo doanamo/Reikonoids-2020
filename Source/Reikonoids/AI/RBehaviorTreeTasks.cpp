@@ -4,28 +4,27 @@
 #include <Components/ActorComponent.h>
 #include <BehaviorTree/BehaviorTreeComponent.h>
 
-namespace
+ARShip* GetShipPawnFromComponent(UBehaviorTreeComponent& Component)
 {
-    ARShip* GetShipPawnFromComponent(UBehaviorTreeComponent& Component)
+    ARAIController* Controller = Cast<ARAIController>(Component.GetOwner());
+    if(!Controller)
     {
-        ARAIController* Controller = Cast<ARAIController>(Component.GetOwner());
-        if(!Controller)
-        {
-            return nullptr;
-        }
-
-        ARShip* Ship = Cast<ARShip>(Controller->GetPawn());
-        if(!Ship)
-        {
-            return nullptr;
-        }
-
-        return Ship;
+        return nullptr;
     }
+
+    ARShip* Ship = Cast<ARShip>(Controller->GetPawn());
+    if(!Ship)
+    {
+        return nullptr;
+    }
+
+    return Ship;
 }
 
 EBTNodeResult::Type URBehaviorTreeTask_MoveForward::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
+    Super::ExecuteTask(OwnerComp, NodeMemory);
+
     // Move ship forward.
     ARShip* Ship = GetShipPawnFromComponent(OwnerComp);
 
@@ -39,6 +38,8 @@ EBTNodeResult::Type URBehaviorTreeTask_MoveForward::ExecuteTask(UBehaviorTreeCom
 
 EBTNodeResult::Type URBehaviorTreeTask_StartFiring::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
+    Super::ExecuteTask(OwnerComp, NodeMemory);
+
     // Start firing weapon.
     ARShip* Ship = GetShipPawnFromComponent(OwnerComp);
 
@@ -52,6 +53,8 @@ EBTNodeResult::Type URBehaviorTreeTask_StartFiring::ExecuteTask(UBehaviorTreeCom
 
 EBTNodeResult::Type URBehaviorTreeTask_StopFiring::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
+    Super::ExecuteTask(OwnerComp, NodeMemory);
+
     // Stop firing weapon.
     ARShip* Ship = GetShipPawnFromComponent(OwnerComp);
 

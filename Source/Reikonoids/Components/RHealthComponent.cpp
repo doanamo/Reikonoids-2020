@@ -29,7 +29,7 @@ void URHealthComponent::BeginPlay()
     // Broadcast actor's death event if initial health is zero.
     if(CurrentHealth == 0.0f)
     {
-        OnDeath.Broadcast();
+        OnDeath.Broadcast(nullptr);
     }
 }
 
@@ -81,7 +81,7 @@ void URHealthComponent::OnTakeAnyDamage(AActor* DamagedActor, float Damage, cons
     // Broadcast actor's death event on fatal damage.
     if(CurrentHealth <= 0.0f)
     {
-        OnDeath.Broadcast();
+        OnDeath.Broadcast(InstigatedBy);
     }
 }
 

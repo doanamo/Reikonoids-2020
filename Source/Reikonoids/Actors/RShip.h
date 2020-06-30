@@ -7,6 +7,7 @@ class USphereComponent;
 class URHealthComponent;
 class URModifierStackComponent;
 class URWeaponComponent;
+class AController;
 
 UCLASS()
 class REIKONOIDS_API ARShip : public APawn
@@ -59,7 +60,7 @@ protected:
     virtual void FaceRotation(FRotator NewControlRotation, float DeltaTime) override;
 
     UFUNCTION()
-    void OnDeath();
+    void OnDeath(AController* InstigatedBy);
 
     float ForwardMovementInput = 0.0f;
     float YawRotationInput = 0.0f;

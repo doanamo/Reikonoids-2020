@@ -87,10 +87,13 @@ void URSpawnDirector::UpdatePopulation()
             }
         }
 
+        // Increase population spawn count.
+        SpawnPopulation.SpawnCount += SpawnPopulation.SpawnCountIncreasePerSecond * PopulationUpdateDelay;
+
         // Spawn actors within spawn radius.
         if(SpawnEnabled)
         {
-            int SpawnsNeeded = SpawnPopulation.SpawnCount - SpawnPopulation.Actors.Num();
+            int SpawnsNeeded = (int)SpawnPopulation.SpawnCount - SpawnPopulation.Actors.Num();
             for(int SpawnIndex = 0; SpawnIndex < SpawnsNeeded; ++SpawnIndex)
             {
                 // Calculate random spawn location using uniformly randomized point on annulus.

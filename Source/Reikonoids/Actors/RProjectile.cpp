@@ -64,7 +64,7 @@ void ARProjectile::OnActorBeginOverlap(AActor* OverlappedActor, AActor* OtherAct
 
     // Make overlapped actor receive damage.
     FDamageEvent DamageEvent;
-    OtherActor->TakeDamage(Damage, DamageEvent, nullptr, this);
+    OtherActor->TakeDamage(Damage, DamageEvent, GetInstigatorController(), this);
 
     // Handle projectile piercing.
     if(PierceCount > 0)

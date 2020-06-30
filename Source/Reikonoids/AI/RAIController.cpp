@@ -17,7 +17,7 @@ ARAIController::ARAIController()
     // Create pawn sensing component.
     PawnSensingComponent = CreateDefaultSubobject<UPawnSensingComponent>(TEXT("PawnSensingComponent"));
     PawnSensingComponent->SetPeripheralVisionAngle(180.0f);
-    PawnSensingComponent->SightRadius = 1400.0f;
+    PawnSensingComponent->SightRadius = 3000.0f;
 }
 
 ARAIController::~ARAIController() = default;

@@ -23,7 +23,10 @@ struct REIKONOIDS_API FRSpawnPopulation
     float DespawnRadius = 7000.0f;
     
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-    int SpawnCount = 100;
+    float SpawnCount = 100.0f;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+    float SpawnCountIncreasePerSecond = 0.0f;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
     bool RandomizeRotation = false;

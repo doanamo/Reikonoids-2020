@@ -72,12 +72,15 @@ void ARShip::FaceRotation(FRotator NewControlRotation, float DeltaTime)
     SetActorRotation(FMath::RInterpTo(GetActorRotation(), NewControlRotation, DeltaTime, 4.0f));
 }
 
-void ARShip::OnDeath()
+void ARShip::OnDeath(AController* InstigatedBy)
 {
     // Increase score for destroying this ship.
     if(ARGameMode* GameMode = GetWorld()->GetAuthGameMode<ARGameMode>())
     {
-        GameMode->PlayerScore += DestructionScore;
+        if(InstigatedBy == GetWorld()->GetFirstPlayerController())
+        {
+            GameMode->PlayerScore += DestructionScore;
+        }
     }
 
     // Destroy actor.

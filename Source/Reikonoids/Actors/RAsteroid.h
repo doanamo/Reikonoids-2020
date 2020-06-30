@@ -57,5 +57,5 @@ protected:
     virtual void BeginPlay() override;
 
     UFUNCTION()
-    void OnDeath();
+    void OnDeath(AController* InstigatedBy);
 };

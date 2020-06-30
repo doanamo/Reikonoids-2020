@@ -21,6 +21,7 @@ void ARPlayerController::Exit()
 
 void ARPlayerController::Proceed()
 {
+    OnProceedAction.Broadcast();
 }
 
 void ARPlayerController::OnPossess(APawn* PossesedPawn)

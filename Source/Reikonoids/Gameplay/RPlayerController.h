@@ -20,5 +20,6 @@ protected:
     virtual void BeginDestroy() override;
 
 private:
+    UPROPERTY()
     AActor* CameraAttachment = nullptr;
 };

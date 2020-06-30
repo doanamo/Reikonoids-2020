@@ -2,6 +2,7 @@
 #include "../Components/RHealthComponent.h"
 #include "../Components/RModifierStackComponent.h"
 #include "../Components/RWeaponComponent.h"
+#include "../Gameplay/RGameMode.h"
 #include <Components/SphereComponent.h>
 #include <GameFramework/Actor.h>
 
@@ -73,6 +74,13 @@ void ARShip::FaceRotation(FRotator NewControlRotation, float DeltaTime)
 
 void ARShip::OnDeath()
 {
+    // Increase score for destroying this ship.
+    if(ARGameMode* GameMode = GetWorld()->GetAuthGameMode<ARGameMode>())
+    {
+        GameMode->PlayerScore += DestructionScore;
+    }
+
+    // Destroy actor.
     Destroy();
 }
 

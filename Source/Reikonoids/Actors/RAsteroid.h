@@ -16,6 +16,9 @@ public:
     virtual ~ARAsteroid();
 
     UPROPERTY(EditDefaultsOnly)
+    int DestructionScore = 0;
+
+    UPROPERTY(EditDefaultsOnly)
     int FractureIndex = 3;
 
     UPROPERTY(EditDefaultsOnly)

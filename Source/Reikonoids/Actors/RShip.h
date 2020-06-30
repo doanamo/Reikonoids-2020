@@ -28,6 +28,9 @@ public:
     UFUNCTION(BlueprintCallable)
     void RotateRight(float AxisScale);
 
+    UPROPERTY(EditDefaultsOnly)
+    int DestructionScore = 0;
+
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
     float MovementImpulseSize = 50000.0f;
 

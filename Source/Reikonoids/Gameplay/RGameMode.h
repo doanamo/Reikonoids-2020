@@ -14,6 +14,9 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Instanced)
     URSpawnDirector* SpawnDirector = nullptr;
 
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+    int PlayerScore = 0;
+
 protected:
     ARGameMode();
 

@@ -65,6 +65,12 @@ FVector ARAsteroid::RandomizeVelocity() const
 
 void ARAsteroid::OnDeath()
 {
+    // Increase score for destroying this asteroid.
+    if(ARGameMode* GameMode = GetWorld()->GetAuthGameMode<ARGameMode>())
+    {
+        GameMode->PlayerScore += DestructionScore;
+    }
+
     // Get current velocity before we destroy this actor.
     // It gets immediately cleared to zeros when destroying it.
     FVector CurrentVelocity = SphereCollision->GetComponentVelocity();
@@ -107,6 +113,7 @@ void ARAsteroid::OnDeath()
         // Setup asteroid.
         Asteroid->FractureIndex = FractureIndex - 1;
         Asteroid->FractureCount = FractureCount + 1;
+        Asteroid->DestructionScore = DestructionScore * FractureScale;
         Asteroid->SphereCollision->SetSphereRadius(SphereCollision->GetUnscaledSphereRadius() * FractureScale);
         Asteroid->SphereCollision->SetMassScale(NAME_None, SphereCollision->GetMassScale() * FractureScale);
         Asteroid->StaticMesh->SetWorldScale3D(StaticMesh->GetComponentScale() * FractureScale);

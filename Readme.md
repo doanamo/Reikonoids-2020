@@ -6,7 +6,7 @@ Implements notable features such as:
 * Dynamic/ambient spawn system for asteroids, buffs and enemies.
 * Buff system based on a stack where different modifiers can be applied on a unit.
 * Physically based movement where you can interact with other physical objects.
-* Simple AI that moves towards the player and tries to detroy the target.
+* Simple AI that seeks and attacks the player.
 
 Screenshot
 ====
